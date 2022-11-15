@@ -184,7 +184,7 @@ describe('integration tests', () => {
 
     const client = await Client.create(config)
 
-    createReleaseForTest(client)
+    await createReleaseForTest(client)
     standardInputParameters.releaseNumber = localReleaseNumber
     const result = await createDeploymentFromInputs(client, standardInputParameters)
 
