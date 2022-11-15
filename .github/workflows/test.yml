@@ -81,8 +81,8 @@ jobs:
         OCTOPUS_API_KEY: ${{ env.ADMIN_API_KEY }}
         OCTOPUS_SPACE: 'Default'
       with:
-        project: ${{ needs.test.outputs.gha_selftest_project_name }} # see integration.test.ts
-        release_number: ${{ needs.test.outputs.gha_selftest_release_number }}
+        project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
+        release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
         environments: |
           'Dev'
           'Staging'
