@@ -83,7 +83,7 @@ jobs:
         with:
           project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
           release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
-          environments: [ |
+          environments: [
             'Dev'
             'Staging']
 
