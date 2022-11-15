@@ -82,6 +82,8 @@ jobs:
       server_task_ids: ${{ steps.self_test.outputs.server_task_ids }}
 
     steps:
+    - uses: actions/checkout@v3
+
     - name: GitHub Action self-test
       id: self_test
       uses: ./
