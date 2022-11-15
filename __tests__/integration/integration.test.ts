@@ -111,7 +111,7 @@ describe('integration tests', () => {
         StartTrigger: StartTrigger.StartAfterPrevious,
         Id: '',
         Name: `step1-${runId}`,
-        Properties: { 'Octopus.Action.TargetRoles': 'deploy' },
+        Properties: {},
         Actions: [
           {
             Id: '',
