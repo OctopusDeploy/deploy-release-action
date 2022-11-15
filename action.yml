@@ -21,7 +21,7 @@ inputs:
   environments:
     description: 'A multi-line list of environments to deploy to.'
     required: true
-  useGuidedFailure:
+  use_guided_failure:
     default: false
     description: 'Whether to use guided failure mode if errors occur during the deployment.'
   variables:
