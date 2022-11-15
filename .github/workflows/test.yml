@@ -95,7 +95,7 @@ jobs:
     needs: [test]
     strategy:
       matrix:
-        deploymentEnv: ${{ needs.test.outputs.server_task_ids}}
+        serverTaskId: ${{ needs.test.outputs.server_task_ids}}
     steps:
     - name: Echo server task
-      run: echo "Deployment queued [${{ matrix.deploymentEnv }}]"
+      run: echo "Deployment queued [${{ matrix.serverTaskId }}]"
