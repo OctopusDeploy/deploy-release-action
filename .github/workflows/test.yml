@@ -48,47 +48,47 @@ jobs:
       server_task_ids: ${{ steps.self_test.outputs.server_task_ids }}
 
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Install Octopus CLI 🐙
-        uses: OctopusDeploy/install-octopus-cli-action@v1
-        with:
-          version: '*'
+    - name: Install Octopus CLI 🐙
+      uses: OctopusDeploy/install-octopus-cli-action@v1
+      with:
+        version: '*'
 
-      - name: Install package dependencies
-        run: npm install
+    - name: Install package dependencies
+      run: npm install
 
-      - name: Compile and run tests
-        id: npm_tests
-        env:
-          OCTOPUS_TEST_URL: ${{ env.SERVER_URL }}
-          OCTOPUS_TEST_API_KEY: ${{ env.ADMIN_API_KEY }}
-        run: npm run all
+    - name: Compile and run tests
+      id: npm_tests
+      env:
+        OCTOPUS_TEST_URL: ${{ env.SERVER_URL }}
+        OCTOPUS_TEST_API_KEY: ${{ env.ADMIN_API_KEY }}
+      run: npm run all
 
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: JEST Tests
-          path: 'reports/jest-*.xml'
-          reporter: jest-junit
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: JEST Tests
+        path: 'reports/jest-*.xml'
+        reporter: jest-junit
 
-      - name: GitHub Action self-test
-        id: self_test
-        uses: ./
-        env:
-          OCTOPUS_URL: ${{ env.SERVER_URL }}
-          OCTOPUS_API_KEY: ${{ env.ADMIN_API_KEY }}
-          OCTOPUS_SPACE: 'Default'
-        with:
-          project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
-          release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
-          environments: [
-            'Dev'
-            'Staging']
+    - name: GitHub Action self-test
+      id: self_test
+      uses: ./
+      env:
+        OCTOPUS_URL: ${{ env.SERVER_URL }}
+        OCTOPUS_API_KEY: ${{ env.ADMIN_API_KEY }}
+        OCTOPUS_SPACE: 'Default'
+      with:
+        project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
+        release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
+        environments: [
+          'Dev'
+          'Staging']
 
-      - name: Echo server tasks from self-test
-        run: echo "Deployments queued [${{ steps.self_test.outputs.server_task_ids }}]"
+    - name: Echo server tasks from self-test
+      run: echo "Deployments queued [${{ steps.self_test.outputs.server_task_ids }}]"
 
   test-server-tasks:
     runs-on: ubuntu-latest
@@ -97,5 +97,5 @@ jobs:
       matrix:
         deploymentEnv: ${{ needs.test.outputs.server_task_ids}}
     steps:
-      - name: Echo server task
-        run: echo "Deployment queued [${{ matrix.deploymentEnv }}]"
+    - name: Echo server task
+      run: echo "Deployment queued [${{ matrix.deploymentEnv }}]"
