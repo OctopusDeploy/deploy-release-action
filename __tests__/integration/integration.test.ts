@@ -191,8 +191,6 @@ describe('integration tests', () => {
     // The first release in the project, so it should always have 0.0.1
     expect(result.length).toBe(1)
 
-    expect(output.getAllMessages()).toContain(
-      `[INFO] 🐙 Octopus Deploy queued deployment(s) in Project **${localProjectName}**.`
-    )
+    expect(output.getAllMessages()).toContain(`[INFO] 🎉 Deployment(s) queued successfully!`)
   })
 })
