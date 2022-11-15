@@ -45,7 +45,8 @@ jobs:
       checks: write
 
     outputs:
-      server_task_ids: ${{ steps.self_test.outputs.server_task_ids }}
+      gha_selftest_project_name: ${{ steps.npm_tests.outputs.gha_selftest_project_name }}
+      gha_selftest_release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
 
     steps:
     - uses: actions/checkout@v3
@@ -73,6 +74,14 @@ jobs:
         path: 'reports/jest-*.xml'
         reporter: jest-junit
 
+  test-deploy-release:
+    runs-on: ubuntu-latest
+    needs: [test]
+
+    outputs:
+      server_task_ids: ${{ steps.self_test.outputs.server_task_ids }}
+
+    steps:
     - name: GitHub Action self-test
       id: self_test
       uses: ./
@@ -81,8 +90,8 @@ jobs:
         OCTOPUS_API_KEY: ${{ env.ADMIN_API_KEY }}
         OCTOPUS_SPACE: 'Default'
       with:
-        project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
-        release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
+        project: ${{ needs.test.outputs.gha_selftest_project_name }} # see integration.test.ts
+        release_number: ${{ needs.test.outputs.gha_selftest_release_number }}
         environments: |
           'Dev'
           'Staging'
@@ -92,10 +101,10 @@ jobs:
 
   test-server-tasks:
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test-deploy-release]
     strategy:
       matrix:
-        serverTaskId: ${{ needs.test.outputs.server_task_ids}}
+        serverTaskId: ${{ needs.test-deploy-release.outputs.server_task_ids}}
     steps:
     - name: Echo server task
       run: echo "Deployment queued [${{ matrix.serverTaskId }}]"

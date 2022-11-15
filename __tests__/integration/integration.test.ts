@@ -134,7 +134,7 @@ describe('integration tests', () => {
             Packages: [],
             Condition: RunConditionForAction.Success,
             Properties: {
-              'Octopus.Action.RunOnServer': 'false',
+              'Octopus.Action.RunOnServer': 'true',
               'Octopus.Action.Script.ScriptSource': 'Inline',
               'Octopus.Action.Script.Syntax': 'Bash',
               'Octopus.Action.Script.ScriptBody': "echo 'hello'"
