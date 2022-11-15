@@ -1,3 +1,8 @@
+import { dirSync, setGracefulCleanup } from 'tmp'
+
+setGracefulCleanup()
+const tmpdir = dirSync({ template: 'deploy-release-XXXXXX' })
+
 process.env = Object.assign(process.env, {
   GITHUB_ACTION: '1',
   INPUT_SERVER: process.env['OCTOPUS_URL'],

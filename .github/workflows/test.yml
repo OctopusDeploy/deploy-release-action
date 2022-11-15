@@ -43,6 +43,10 @@ jobs:
     permissions:
       statuses: write
       checks: write
+
+    outputs:
+      server_task_ids: ${{ steps.self_test.outputs.server_task_ids }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -78,6 +82,17 @@ jobs:
           OCTOPUS_SPACE: 'Default'
         with:
           project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
+          release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
+          environments: ['Dev','Staging']
 
-      - name: Echo package number from self-test
-        run: echo "Release Created [${{ steps.self_test.outputs.release_number }}]"
+      - name: Echo server tasks from self-test
+        run: echo "Deployments queued [${{ steps.self_test.outputs.server_task_ids }}]"
+
+  test-server-tasks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deploymentEnv: {{ jobs.test.server_task_ids}}
+    steps:
+      - name: Echo server task
+        run: echo "Deployment queued [${{ matrix.deploymentEnv }}]"
