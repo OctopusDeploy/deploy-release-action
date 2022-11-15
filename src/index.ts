@@ -38,7 +38,7 @@ import { createDeploymentFromInputs } from './api-wrapper'
     const serverTaskIds = await createDeploymentFromInputs(client, parameters)
 
     if (serverTaskIds.length > 0) {
-      setOutput('server_task_ids', serverTaskIds.join('\n'))
+      setOutput('server_task_ids', serverTaskIds)
     }
 
     const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY
