@@ -35,22 +35,22 @@ import { createDeploymentFromInputs } from './api-wrapper'
 
     const client = await Client.create(config)
 
-    const serverTasks = await createDeploymentFromInputs(client, parameters)
+    const deploymentResults = await createDeploymentFromInputs(client, parameters)
 
-    if (serverTasks.length > 0) {
+    if (deploymentResults.length > 0) {
       setOutput(
-        'server_tasks',
-        serverTasks.map(t => {
+        'deployment_results',
+        deploymentResults.map(t => {
           return {
-            id: t.Id,
-            description: t.Description
+            serverTaskId: t.serverTaskId,
+            environmentName: t.environmentName
           }
         })
       )
     }
 
     const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY
-    if (stepSummaryFile && serverTasks.length > 0) {
+    if (stepSummaryFile && deploymentResults.length > 0) {
       writeFileSync(stepSummaryFile, `🐙 Octopus Deploy queued deployment(s) in Project **${parameters.project}**.`)
     }
   } catch (e: unknown) {

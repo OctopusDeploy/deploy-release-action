@@ -1,13 +1,21 @@
 import { InputParameters } from './input-parameters'
-import { TaskResource } from '@octopusdeploy/message-contracts'
 import {
   Client,
   deployReleaseUntenanted,
   CreateDeploymentUntenantedCommandV1,
-  getServerTasks
+  EnvironmentRepository,
+  DeploymentRepository
 } from '@octopusdeploy/api-client'
 
-export async function createDeploymentFromInputs(client: Client, parameters: InputParameters): Promise<TaskResource[]> {
+export interface DeploymentResult {
+  serverTaskId: string
+  environmentName: string
+}
+
+export async function createDeploymentFromInputs(
+  client: Client,
+  parameters: InputParameters
+): Promise<DeploymentResult[]> {
   client.info('🐙 Deploying a release in Octopus Deploy...')
 
   const command: CreateDeploymentUntenantedCommandV1 = {
@@ -27,9 +35,23 @@ export async function createDeploymentFromInputs(client: Client, parameters: Inp
     } queued successfully!`
   )
 
-  const serverTaskIds = response.deploymentServerTasks.map(x => x.serverTaskId)
+  const deploymentIds = response.deploymentServerTasks.map(x => x.deploymentId)
 
-  const serverTasks = await getServerTasks(client, parameters.space, serverTaskIds)
+  const deploymentRepository = new DeploymentRepository(client)
+  const deployments = await deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length })
 
-  return serverTasks
+  const envIds = deployments.Items.map(d => d.EnvironmentId)
+  const envRepository = new EnvironmentRepository(client)
+  const environments = await envRepository.list({ ids: envIds, take: envIds.length })
+
+  const results = response.deploymentServerTasks.map(x => {
+    return {
+      serverTaskId: x.serverTaskId,
+      environmentName: environments.Items.filter(
+        e => e.Id === deployments.Items.filter(d => d.Id === x.deploymentId)[0].Id
+      )[0].Name
+    }
+  })
+
+  return results
 }
