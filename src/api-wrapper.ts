@@ -29,7 +29,7 @@ export async function createDeploymentFromInputs(client: Client, parameters: Inp
 
   const serverTaskIds = response.deploymentServerTasks.map(x => x.serverTaskId)
 
-  var serverTasks = await getServerTasks(client, parameters.space, serverTaskIds)
+  const serverTasks = await getServerTasks(client, parameters.space, serverTaskIds)
 
   return serverTasks
 }

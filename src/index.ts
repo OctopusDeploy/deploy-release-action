@@ -1,7 +1,7 @@
 import { getInputParameters } from './input-parameters'
 import { debug, info, warning, error, setFailed, setOutput, isDebug } from '@actions/core'
 import { writeFileSync } from 'fs'
-import { Client, ClientConfiguration, Logger, TaskRepository } from '@octopusdeploy/api-client'
+import { Client, ClientConfiguration, Logger } from '@octopusdeploy/api-client'
 import { createDeploymentFromInputs } from './api-wrapper'
 
 // GitHub actions entrypoint
