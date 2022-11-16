@@ -43,7 +43,7 @@ import { createDeploymentFromInputs } from './api-wrapper'
         serverTasks.map(t => {
           return {
             id: t.Id,
-            name: t.Name
+            description: t.Description
           }
         })
       )
