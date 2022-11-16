@@ -1,7 +1,13 @@
 import { InputParameters } from './input-parameters'
-import { Client, deployReleaseUntenanted, CreateDeploymentUntenantedCommandV1 } from '@octopusdeploy/api-client'
+import { TaskResource } from '@octopusdeploy/message-contracts'
+import {
+  Client,
+  deployReleaseUntenanted,
+  CreateDeploymentUntenantedCommandV1,
+  getServerTasks
+} from '@octopusdeploy/api-client'
 
-export async function createDeploymentFromInputs(client: Client, parameters: InputParameters): Promise<string[]> {
+export async function createDeploymentFromInputs(client: Client, parameters: InputParameters): Promise<TaskResource[]> {
   client.info('🐙 Deploying a release in Octopus Deploy...')
 
   const command: CreateDeploymentUntenantedCommandV1 = {
@@ -21,5 +27,9 @@ export async function createDeploymentFromInputs(client: Client, parameters: Inp
     } queued successfully!`
   )
 
-  return response.deploymentServerTasks.map(x => x.serverTaskId)
+  const serverTaskIds = response.deploymentServerTasks.map(x => x.serverTaskId)
+
+  var serverTasks = await getServerTasks(client, parameters.space, serverTaskIds)
+
+  return serverTasks
 }

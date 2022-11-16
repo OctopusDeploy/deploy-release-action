@@ -6,6 +6,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@octopusdeploy/api-client": "github:OctopusDeploy/api-client.ts#enh-dropenvvars",
+    "@octopusdeploy/message-contracts": "^1.3.2",
     "tmp": "^0.2.1"
   },
   "description": "GitHub Action to Create a Release in Octopus Deploy",

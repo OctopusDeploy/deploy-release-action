@@ -1,7 +1,7 @@
 import { getInputParameters } from './input-parameters'
 import { debug, info, warning, error, setFailed, setOutput, isDebug } from '@actions/core'
 import { writeFileSync } from 'fs'
-import { Client, ClientConfiguration, Logger } from '@octopusdeploy/api-client'
+import { Client, ClientConfiguration, Logger, TaskRepository } from '@octopusdeploy/api-client'
 import { createDeploymentFromInputs } from './api-wrapper'
 
 // GitHub actions entrypoint
@@ -35,14 +35,19 @@ import { createDeploymentFromInputs } from './api-wrapper'
 
     const client = await Client.create(config)
 
-    const serverTaskIds = await createDeploymentFromInputs(client, parameters)
+    const serverTasks = await createDeploymentFromInputs(client, parameters)
 
-    if (serverTaskIds.length > 0) {
-      setOutput('server_task_ids', serverTaskIds)
+    if (serverTasks.length > 0) {
+      setOutput(
+        'server_tasks',
+        serverTasks.map(t => {
+          t.Id, t.Name
+        })
+      )
     }
 
     const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY
-    if (stepSummaryFile && serverTaskIds.length > 0) {
+    if (stepSummaryFile && serverTasks.length > 0) {
       writeFileSync(stepSummaryFile, `🐙 Octopus Deploy queued deployment(s) in Project **${parameters.project}**.`)
     }
   } catch (e: unknown) {
