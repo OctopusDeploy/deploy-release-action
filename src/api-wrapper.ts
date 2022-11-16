@@ -15,7 +15,11 @@ export async function createDeploymentFromInputs(client: Client, parameters: Inp
 
   const response = await deployReleaseUntenanted(client, command)
 
-  client.info(`🎉 Deployment(s) queued successfully!`)
+  client.info(
+    `🎉 ${response.deploymentServerTasks.length} Deployment${
+      response.deploymentServerTasks.length > 1 ? 's' : ''
+    } queued successfully!`
+  )
 
   return response.deploymentServerTasks.map(x => x.serverTaskId)
 }
