@@ -84,8 +84,8 @@ jobs:
         project: ${{ steps.npm_tests.outputs.gha_selftest_project_name }} # see integration.test.ts
         release_number: ${{ steps.npm_tests.outputs.gha_selftest_release_number }}
         environments: |
-          'Dev'
-          'Staging'
+          Dev
+          Staging
 
     - name: Echo server tasks from self-test
       run: echo "Deployments queued [${{ fromJson(steps.self_test.outputs.server_task_ids) }}]"
