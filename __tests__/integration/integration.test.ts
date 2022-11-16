@@ -86,14 +86,23 @@ describe('integration tests', () => {
 
     // pre-reqs: We need a project, which needs to have a deployment process
 
-    const lifeCycle = (await repository.lifecycles.all())[0]
-    if (!lifeCycle) throw new Error("Can't find first lifecycle")
-
     const projectGroup = (await repository.projectGroups.all())[0]
     if (!projectGroup) throw new Error("Can't find first projectGroup")
 
-    await repository.environments.create({ Name: 'Dev' })
-    await repository.environments.create({ Name: 'Staging' })
+    const devEnv = await repository.environments.create({ Name: 'Dev' })
+    const stagingEnv = await repository.environments.create({ Name: 'Staging Demo' })
+
+    const lifeCycle = (await repository.lifecycles.all())[0]
+    if (!lifeCycle) throw new Error("Can't find first lifecycle")
+    lifeCycle.Phases.push({
+      Id: 'test',
+      Name: 'Testing',
+      OptionalDeploymentTargets: [devEnv.Id, stagingEnv.Id],
+      AutomaticDeploymentTargets: [],
+      MinimumEnvironmentsBeforePromotion: 1,
+      IsOptionalPhase: false
+    })
+    await repository.lifecycles.modify(lifeCycle)
 
     const project = await repository.projects.create({
       Name: localProjectName,
