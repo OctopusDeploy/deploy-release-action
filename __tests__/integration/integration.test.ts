@@ -8,6 +8,7 @@ import {
   CreateReleaseCommandV1,
   DeploymentEnvironment,
   EnvironmentRepository,
+  ExecutionWaiter,
   Logger,
   Repository
 } from '@octopusdeploy/api-client'
@@ -56,6 +57,8 @@ async function createReleaseForTest(client: Client): Promise<void> {
 }
 
 describe('integration tests', () => {
+  jest.setTimeout(100000)
+
   const globalCleanup = new CleanupHelper()
 
   const standardInputParameters: InputParameters = {
@@ -208,5 +211,17 @@ describe('integration tests', () => {
     expect(result.length).toBe(1)
 
     expect(output.getAllMessages()).toContain(`[INFO] 🎉 1 Deployment queued successfully!`)
+
+    // wait for the deployment or the teardown will fail
+    const waiter = new ExecutionWaiter(client, standardInputParameters.space)
+    await waiter.waitForExecutionToComplete(
+      result.map(r => r.serverTaskId),
+      false,
+      true,
+      '',
+      1000,
+      60000,
+      'deployment'
+    )
   })
 })

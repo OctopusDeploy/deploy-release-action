@@ -48,7 +48,7 @@ export async function createDeploymentFromInputs(
     return {
       serverTaskId: x.serverTaskId,
       environmentName: environments.items.filter(
-        e => e.id === deployments.items.filter(d => d.taskId === x.serverTaskId)[0].id
+        e => e.id === deployments.items.filter(d => d.taskId === x.serverTaskId)[0].environmentId
       )[0].name
     }
   })
