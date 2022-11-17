@@ -1,11 +1,12 @@
 import { createDeploymentFromInputs } from '../../src/api-wrapper'
 // we use the Octopus API client to setup and teardown integration test data, it doesn't form part of create-release-action at this point
-import { PackageRequirement, RunCondition, StartTrigger } from '@octopusdeploy/message-contracts'
+import { PackageRequirement, ProjectResource, RunCondition, StartTrigger } from '@octopusdeploy/message-contracts'
 import {
   Client,
   ClientConfiguration,
   createRelease,
   CreateReleaseCommandV1,
+  DeploymentEnvironment,
   EnvironmentRepository,
   Logger,
   Repository
@@ -31,7 +32,8 @@ import { InputParameters } from '../../src/input-parameters'
 const apiClientConfig: ClientConfiguration = {
   userAgentApp: 'Test',
   apiKey: process.env.OCTOPUS_TEST_API_KEY || 'API-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  instanceURL: process.env.OCTOPUS_TEST_URL || 'http://localhost:8050'
+  instanceURL: process.env.OCTOPUS_TEST_URL || 'http://localhost:8050',
+  space: process.env.OCTOPUS_TEST_SPACE || 'Default'
 }
 
 const runId = randomBytes(16).toString('hex')
@@ -42,7 +44,7 @@ async function createReleaseForTest(client: Client): Promise<void> {
   client.info('🐙 Creating a release in Octopus Deploy...')
 
   const command: CreateReleaseCommandV1 = {
-    spaceName: 'Default',
+    spaceName: apiClientConfig.space || 'Default',
     projectName: localProjectName
   }
 
@@ -59,45 +61,61 @@ describe('integration tests', () => {
   const standardInputParameters: InputParameters = {
     server: apiClientConfig.instanceURL,
     apiKey: apiClientConfig.apiKey,
-    space: 'Default',
+    space: apiClientConfig.space || 'Default',
     project: localProjectName,
     releaseNumber: '',
     environments: ['Dev']
   }
 
   let apiClient: Client
+  let repository: Repository
+  let project: ProjectResource
+
   beforeAll(async () => {
     apiClient = await Client.create({ autoConnect: true, ...apiClientConfig })
 
-    const repository = new Repository(apiClient)
+    repository = new Repository(apiClient)
 
     // pre-reqs: We need a project, which needs to have a deployment process
 
     const projectGroup = (await repository.projectGroups.all())[0]
     if (!projectGroup) throw new Error("Can't find first projectGroup")
 
-    const envRepository = new EnvironmentRepository(apiClient, 'Default')
-    const devEnv = await envRepository.create({ name: 'Dev' })
-    const stagingEnv = await envRepository.create({ name: 'Staging Demo' })
+    let devEnv: DeploymentEnvironment
+    let stagingEnv: DeploymentEnvironment
+    const envRepository = new EnvironmentRepository(apiClient, apiClientConfig.space || 'Default')
+    let envs = await envRepository.list({ partialName: 'Dev' })
+    if (envs.items.length === 1) {
+      devEnv = envs.items[0]
+    } else {
+      devEnv = await envRepository.create({ name: 'Dev' })
+    }
+    envs = await envRepository.list({ partialName: 'Staging Demo' })
+    if (envs.items.length === 1) {
+      stagingEnv = envs.items[0]
+    } else {
+      stagingEnv = await envRepository.create({ name: 'Staging Demo' })
+    }
 
     const lifeCycle = (await repository.lifecycles.all())[0]
     if (!lifeCycle) throw new Error("Can't find first lifecycle")
-    lifeCycle.Phases.push({
-      Id: 'test',
-      Name: 'Testing',
-      OptionalDeploymentTargets: [devEnv.id, stagingEnv.id],
-      AutomaticDeploymentTargets: [],
-      MinimumEnvironmentsBeforePromotion: 1,
-      IsOptionalPhase: false
-    })
-    await repository.lifecycles.modify(lifeCycle)
+    if (lifeCycle.Phases.length === 0) {
+      lifeCycle.Phases.push({
+        Id: 'test',
+        Name: 'Testing',
+        OptionalDeploymentTargets: [devEnv.id, stagingEnv.id],
+        AutomaticDeploymentTargets: [],
+        MinimumEnvironmentsBeforePromotion: 1,
+        IsOptionalPhase: false
+      })
+      await repository.lifecycles.modify(lifeCycle)
+    }
 
-    const project = await repository.projects.create({
+    project = await repository.projects.create({
       Name: localProjectName,
       LifecycleId: lifeCycle.Id,
       ProjectGroupId: projectGroup.Id
     })
-    globalCleanup.add(() => repository.projects.del(project))
 
     const deploymentProcess = await repository.deploymentProcesses.get(project.DeploymentProcessId, undefined)
     deploymentProcess.Steps = [
@@ -145,13 +163,14 @@ describe('integration tests', () => {
     await repository.deploymentProcesses.saveToProject(project, deploymentProcess)
   })
 
-  afterAll(() => {
+  afterAll(async () => {
     if (process.env.GITHUB_ACTIONS) {
       // Sneaky: if we are running inside github actions, we *do not* cleanup the octopus server project data.
       // rather, we leave it lying around and setOutput the random project name so the GHA self-test can use it
       setOutput('gha_selftest_project_name', localProjectName)
       setOutput('gha_selftest_release_number', localReleaseNumber)
     } else {
+      await repository.projects.del(project)
       globalCleanup.cleanup()
     }
   })
