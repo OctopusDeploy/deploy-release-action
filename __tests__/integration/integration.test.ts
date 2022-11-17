@@ -6,6 +6,7 @@ import {
   ClientConfiguration,
   createRelease,
   CreateReleaseCommandV1,
+  EnvironmentRepository,
   Logger,
   Repository
 } from '@octopusdeploy/api-client'
@@ -52,20 +53,6 @@ async function createReleaseForTest(client: Client): Promise<void> {
   localReleaseNumber = allocatedReleaseNumber.releaseVersion
 }
 
-// experimental. Should probably be a custom jest matcher
-function expectMatchAll(actual: string[], expected: (string | RegExp)[]) {
-  expect(actual.length).toEqual(expected.length)
-  for (let i = 0; i < actual.length; i++) {
-    const a = actual[i]
-    const e = expected[i]
-    if (e instanceof RegExp) {
-      expect(a).toMatch(e)
-    } else {
-      expect(a).toEqual(e)
-    }
-  }
-}
-
 describe('integration tests', () => {
   const globalCleanup = new CleanupHelper()
 
@@ -89,15 +76,16 @@ describe('integration tests', () => {
     const projectGroup = (await repository.projectGroups.all())[0]
     if (!projectGroup) throw new Error("Can't find first projectGroup")
 
-    const devEnv = await repository.environments.create({ Name: 'Dev' })
-    const stagingEnv = await repository.environments.create({ Name: 'Staging Demo' })
+    const envRepository = new EnvironmentRepository(apiClient, 'Default')
+    const devEnv = await envRepository.create({ name: 'Dev' })
+    const stagingEnv = await envRepository.create({ name: 'Staging Demo' })
 
     const lifeCycle = (await repository.lifecycles.all())[0]
     if (!lifeCycle) throw new Error("Can't find first lifecycle")
     lifeCycle.Phases.push({
       Id: 'test',
       Name: 'Testing',
-      OptionalDeploymentTargets: [devEnv.Id, stagingEnv.Id],
+      OptionalDeploymentTargets: [devEnv.id, stagingEnv.id],
       AutomaticDeploymentTargets: [],
       MinimumEnvironmentsBeforePromotion: 1,
       IsOptionalPhase: false

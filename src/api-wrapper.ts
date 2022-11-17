@@ -37,19 +37,19 @@ export async function createDeploymentFromInputs(
 
   const deploymentIds = response.deploymentServerTasks.map(x => x.deploymentId)
 
-  const deploymentRepository = new DeploymentRepository(client)
+  const deploymentRepository = new DeploymentRepository(client, command.spaceName)
   const deployments = await deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length })
 
-  const envIds = deployments.Items.map(d => d.EnvironmentId)
-  const envRepository = new EnvironmentRepository(client)
+  const envIds = deployments.items.map(d => d.environmentId)
+  const envRepository = new EnvironmentRepository(client, command.spaceName)
   const environments = await envRepository.list({ ids: envIds, take: envIds.length })
 
   const results = response.deploymentServerTasks.map(x => {
     return {
       serverTaskId: x.serverTaskId,
-      environmentName: environments.Items.filter(
-        e => e.Id === deployments.Items.filter(d => d.Id === x.deploymentId)[0].Id
-      )[0].Name
+      environmentName: environments.items.filter(
+        e => e.id === deployments.items.filter(d => d.taskId === x.serverTaskId)[0].id
+      )[0].name
     }
   })
 
