@@ -45,7 +45,7 @@ jobs:
       checks: write
 
     outputs:
-      deployment_results: ${{ steps.self_test.outputs.deployment_results }}
+      server_tasks: ${{ steps.self_test.outputs.server_tasks }}
 
     steps:
     - uses: actions/checkout@v3
@@ -83,7 +83,7 @@ jobs:
           Staging Demo
 
     - name: Echo server tasks from self-test
-      run: echo "Deployments queued [${{ steps.self_test.outputs.deployment_results }}]"
+      run: echo "Deployments queued [${{ steps.self_test.outputs.server_tasks }}]"
 
   test-server-tasks:
     runs-on: ubuntu-latest
@@ -91,7 +91,7 @@ jobs:
     name: ${{ matrix.deployment.environmentName }}
     strategy:
       matrix:
-        deployment: ${{ fromJson(needs.test.outputs.deployment_results) }}
+        deployment: ${{ fromJson(needs.test.outputs.server_tasks) }}
     steps:
     - name: Echo server task
-      run: echo "Deployment queued [${{ matrix.deployment.serverTask }}]"
+      run: echo "Deployment queued [${{ matrix.deployment.serverTaskId }}]"

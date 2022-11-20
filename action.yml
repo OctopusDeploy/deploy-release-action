@@ -28,7 +28,7 @@ inputs:
     description: 'A multi-line list of prompted variable values. Format: name:value'
 
 outputs:
-  deployment_results:
+  server_tasks:
     description: 'JSON string for an array of objects having a `serverTaskId` and an `environmentName`'
 
 runs:

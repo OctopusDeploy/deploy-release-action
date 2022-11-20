@@ -39,7 +39,7 @@ import { createDeploymentFromInputs } from './api-wrapper'
 
     if (deploymentResults.length > 0) {
       setOutput(
-        'deployment_results',
+        'server_tasks',
         deploymentResults.map(t => {
           return {
             serverTaskId: t.serverTaskId,
