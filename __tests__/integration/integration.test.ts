@@ -46,14 +46,14 @@ async function createReleaseForTest(client: Client): Promise<void> {
 
   const command: CreateReleaseCommandV1 = {
     spaceName: apiClientConfig.space || 'Default',
-    projectName: localProjectName
+    ProjectName: localProjectName
   }
 
   const allocatedReleaseNumber = await createRelease(client, command)
 
-  client.info(`🎉 Release ${allocatedReleaseNumber.releaseVersion} created successfully!`)
+  client.info(`🎉 Release ${allocatedReleaseNumber.ReleaseVersion} created successfully!`)
 
-  localReleaseNumber = allocatedReleaseNumber.releaseVersion
+  localReleaseNumber = allocatedReleaseNumber.ReleaseVersion
 }
 
 describe('integration tests', () => {
@@ -88,16 +88,16 @@ describe('integration tests', () => {
     let stagingEnv: DeploymentEnvironment
     const envRepository = new EnvironmentRepository(apiClient, apiClientConfig.space || 'Default')
     let envs = await envRepository.list({ partialName: 'Dev' })
-    if (envs.items.length === 1) {
-      devEnv = envs.items[0]
+    if (envs.Items.filter(e => e.Name === 'Dev').length === 1) {
+      devEnv = envs.Items.filter(e => e.Name === 'Dev')[0]
     } else {
-      devEnv = await envRepository.create({ name: 'Dev' })
+      devEnv = await envRepository.create({ Name: 'Dev' })
     }
     envs = await envRepository.list({ partialName: 'Staging Demo' })
-    if (envs.items.length === 1) {
-      stagingEnv = envs.items[0]
+    if (envs.Items.filter(e => e.Name === 'Staging Demo').length === 1) {
+      stagingEnv = envs.Items.filter(e => e.Name === 'Staging Demo')[0]
     } else {
-      stagingEnv = await envRepository.create({ name: 'Staging Demo' })
+      stagingEnv = await envRepository.create({ Name: 'Staging Demo' })
     }
 
     const lifeCycle = (await repository.lifecycles.all())[0]
@@ -106,7 +106,7 @@ describe('integration tests', () => {
       lifeCycle.Phases.push({
         Id: 'test',
         Name: 'Testing',
-        OptionalDeploymentTargets: [devEnv.id, stagingEnv.id],
+        OptionalDeploymentTargets: [devEnv.Id, stagingEnv.Id],
         AutomaticDeploymentTargets: [],
         MinimumEnvironmentsBeforePromotion: 1,
         IsOptionalPhase: false
@@ -173,7 +173,9 @@ describe('integration tests', () => {
       setOutput('gha_selftest_project_name', localProjectName)
       setOutput('gha_selftest_release_number', localReleaseNumber)
     } else {
-      await repository.projects.del(project)
+      if (project) {
+        await repository.projects.del(project)
+      }
       globalCleanup.cleanup()
     }
   })

@@ -1,7 +1,7 @@
-import * as inputs from '../../src/input-parameters'
+import { getInputParameters } from '../../src/input-parameters'
 
 test('get input parameters', () => {
-  const inputParameters = inputs.getInputParameters()
+  const inputParameters = getInputParameters()
   expect(inputParameters).toBeDefined()
   expect(inputParameters.environments).toBeDefined()
   expect(inputParameters.environments[0]).toBe('Dev')

@@ -20,36 +20,36 @@ export async function createDeploymentFromInputs(
 
   const command: CreateDeploymentUntenantedCommandV1 = {
     spaceName: parameters.space,
-    projectName: parameters.project,
-    releaseVersion: parameters.releaseNumber,
-    environmentNames: parameters.environments,
-    useGuidedFailure: parameters.useGuidedFailure,
-    variables: parameters.variables
+    ProjectName: parameters.project,
+    ReleaseVersion: parameters.releaseNumber,
+    EnvironmentNames: parameters.environments,
+    UseGuidedFailure: parameters.useGuidedFailure,
+    Variables: parameters.variables
   }
 
   const response = await deployReleaseUntenanted(client, command)
 
   client.info(
-    `🎉 ${response.deploymentServerTasks.length} Deployment${
-      response.deploymentServerTasks.length > 1 ? 's' : ''
+    `🎉 ${response.DeploymentServerTasks.length} Deployment${
+      response.DeploymentServerTasks.length > 1 ? 's' : ''
     } queued successfully!`
   )
 
-  const deploymentIds = response.deploymentServerTasks.map(x => x.deploymentId)
+  const deploymentIds = response.DeploymentServerTasks.map(x => x.deploymentId)
 
   const deploymentRepository = new DeploymentRepository(client, parameters.space)
   const deployments = await deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length })
 
-  const envIds = deployments.items.map(d => d.environmentId)
+  const envIds = deployments.Items.map(d => d.EnvironmentId)
   const envRepository = new EnvironmentRepository(client, parameters.space)
   const environments = await envRepository.list({ ids: envIds, take: envIds.length })
 
-  const results = response.deploymentServerTasks.map(x => {
+  const results = response.DeploymentServerTasks.map(x => {
     return {
       serverTaskId: x.serverTaskId,
-      environmentName: environments.items.filter(
-        e => e.id === deployments.items.filter(d => d.taskId === x.serverTaskId)[0].environmentId
-      )[0].name
+      environmentName: environments.Items.filter(
+        e => e.Id === deployments.Items.filter(d => d.TaskId === x.serverTaskId)[0].EnvironmentId
+      )[0].Name
     }
   })
 
