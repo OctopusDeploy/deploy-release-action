@@ -39,13 +39,13 @@ export async function createDeploymentFromInputs(
     throw new Error('Expected at least one deployment to be queued.')
   }
   if (
-    response.DeploymentServerTasks[0].serverTaskId === null ||
-    response.DeploymentServerTasks[0].serverTaskId === undefined
+    response.DeploymentServerTasks[0].ServerTaskId === null ||
+    response.DeploymentServerTasks[0].ServerTaskId === undefined
   ) {
     throw new Error('Server task id was not deserialized correctly.')
   }
 
-  const deploymentIds = response.DeploymentServerTasks.map(x => x.deploymentId)
+  const deploymentIds = response.DeploymentServerTasks.map(x => x.DeploymentId)
 
   const deploymentRepository = new DeploymentRepository(client, parameters.space)
   const deployments = await deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length })
@@ -56,9 +56,9 @@ export async function createDeploymentFromInputs(
 
   const results = response.DeploymentServerTasks.map(x => {
     return {
-      serverTaskId: x.serverTaskId,
+      serverTaskId: x.ServerTaskId,
       environmentName: environments.Items.filter(
-        e => e.Id === deployments.Items.filter(d => d.TaskId === x.serverTaskId)[0].EnvironmentId
+        e => e.Id === deployments.Items.filter(d => d.TaskId === x.ServerTaskId)[0].EnvironmentId
       )[0].Name
     }
   })
