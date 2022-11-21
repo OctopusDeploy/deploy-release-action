@@ -218,7 +218,7 @@ describe('integration tests', () => {
     const waiter = new ExecutionWaiter(client, standardInputParameters.space)
     await waiter.waitForExecutionToComplete(
       result.map(r => r.serverTaskId),
-      false,
+      true,
       true,
       '',
       1000,
