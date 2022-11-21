@@ -42,7 +42,7 @@ const localProjectName = `project${runId}`
 let localReleaseNumber = ''
 
 async function createReleaseForTest(client: Client): Promise<void> {
-  client.info('🐙 Creating a release in Octopus Deploy...')
+  client.info('Creating a release in Octopus Deploy...')
 
   const command: CreateReleaseCommandV1 = {
     spaceName: apiClientConfig.space || 'Default',
@@ -51,7 +51,7 @@ async function createReleaseForTest(client: Client): Promise<void> {
 
   const allocatedReleaseNumber = await createRelease(client, command)
 
-  client.info(`🎉 Release ${allocatedReleaseNumber.ReleaseVersion} created successfully!`)
+  client.info(`Release ${allocatedReleaseNumber.ReleaseVersion} created successfully!`)
 
   localReleaseNumber = allocatedReleaseNumber.ReleaseVersion
 }
@@ -67,7 +67,7 @@ describe('integration tests', () => {
     space: apiClientConfig.space || 'Default',
     project: localProjectName,
     releaseNumber: '',
-    environments: ['Dev']
+    environments: ['Dev', 'Staging Demo']
   }
 
   let apiClient: Client
@@ -210,15 +210,15 @@ describe('integration tests', () => {
     const result = await createDeploymentFromInputs(client, standardInputParameters)
 
     // The first release in the project, so it should always have 0.0.1
-    expect(result.length).toBe(1)
+    expect(result.length).toBe(2)
+    expect(result[0].serverTaskId).toContain('ServerTasks-')
 
-    expect(output.getAllMessages()).toContain(`[INFO] 🎉 1 Deployment queued successfully!`)
+    expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
 
     // wait for the deployment or the teardown will fail
     const waiter = new ExecutionWaiter(client, standardInputParameters.space)
     await waiter.waitForExecutionToComplete(
       result.map(r => r.serverTaskId),
-      true,
       true,
       '',
       1000,
