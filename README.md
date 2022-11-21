@@ -43,22 +43,24 @@ steps:
 
 ## ✍️ Environment Variables
 
-| Name              | Description                                                                                                                                                                    |
-| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OCTOPUS_API_KEY` | The API key used to access Octopus Deploy. `API-GUEST` may be used if the guest account is enabled. It is strongly recommended that this value retrieved from a GitHub secret. |
-| `OCTOPUS_URL`     | The base URL hosting Octopus Deploy (i.e. `https://octopus.example.com`). It is strongly recommended that this value retrieved from a GitHub secret.                           |
-| `OCTOPUS_SPACE`   | The Name of a space within which this command will be executed.                                                                                                                |
+| Name              | Description                                                                                                                                          |
+| :---------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OCTOPUS_URL`     | The base URL hosting Octopus Deploy (i.e. `https://octopus.example.com`). It is strongly recommended that this value retrieved from a GitHub secret. |
+| `OCTOPUS_API_KEY` | The API key used to access Octopus Deploy. It is strongly recommended that this value retrieved from a GitHub secret.                                |
+| `OCTOPUS_SPACE`   | The Name of a space within which this command will be executed.                                                                                      |
 
 ## 📥 Inputs
 
-| Name             | Description                                                                                                                                                                                                                                                                     |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `project`        | **Required.** The name of the project associated with this release.                                                                                                                                                                                                             |
-| `release_number` | **Required.** The release number to deploy.                                                                                                                                                                                                                                     |
-| `environments`   | **Required.** The list of environment names to deploy to.                                                                                                                                                                                                                       |
-| `api_key`        | The API key used to access Octopus Deploy. An API key is required, but you may also use the `OCTOPUS_API_KEY` environment variable. If the guest account is enabled, a key of API-GUEST may be used. It is strongly recommended that this value retrieved from a GitHub secret. |
-| `server`         | The base URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). The Server URL is required, but you may also use the `OCTOPUS_URL` environment variable.                                                                                                             |
-| `space`          | The name or ID of a space within which this command will be executed.                                                                                                                                                                                                           |
+| Name                 | Description                                                                                                                                                                                                  |
+| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `project`            | **Required.** The name of the project associated with this release.                                                                                                                                          |
+| `release_number`     | **Required.** The release number to deploy.                                                                                                                                                                  |
+| `environments`       | **Required.** The list of environment names to deploy to.                                                                                                                                                    |
+| `use_guided_failure` | Whether to use guided failure mode if errors occur during the deployment.                                                                                                                                    |
+| `variables`          | A multi-line list of prompted variable values. Format: name:value.                                                                                                                                           |
+| `server`             | The instance URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). The instance URL is required, but you may also use the OCTOPUS_URL environment variable.                                      |
+| `api_key`            | The API key used to access Octopus Deploy. An API key is required, but you may also use the OCTOPUS_API_KEY environment variable. It is strongly recommended that this value retrieved from a GitHub secret. |
+| `space`              | The name of a space within which this command will be executed. The space name is required, but you may also use the OCTOPUS_SPACE environment variable.                                                     |
 
 ## 📤 Outputs
 

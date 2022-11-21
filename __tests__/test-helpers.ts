@@ -5,17 +5,17 @@ export class CaptureOutput {
     this.msgs = []
   }
 
-  debug(message: string) {
-    this.msgs.push('[DEBUG] ' + message)
+  debug(message: string): void {
+    this.msgs.push(`[DEBUG] ${message}`)
   }
-  info(message: string) {
-    this.msgs.push('[INFO] ' + message)
+  info(message: string): void {
+    this.msgs.push(`[INFO] ${message}`)
   }
-  warn(message: string) {
-    this.msgs.push('[WARN] ' + message)
+  warn(message: string): void {
+    this.msgs.push(`[WARN]  ${message}`)
   }
-  error(message: string) {
-    this.msgs.push('[ERROR] ' + message)
+  error(message: string): void {
+    this.msgs.push(`[ERROR]  ${message}`)
   }
 
   getAllMessages(): string[] {
