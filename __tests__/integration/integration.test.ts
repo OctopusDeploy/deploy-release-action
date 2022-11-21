@@ -203,27 +203,32 @@ describe('integration tests', () => {
       logging: logger
     }
 
-    const client = await Client.create(config)
+    try {
+      const client = await Client.create(config)
 
-    await createReleaseForTest(client)
-    standardInputParameters.releaseNumber = localReleaseNumber
-    const result = await createDeploymentFromInputs(client, standardInputParameters)
+      await createReleaseForTest(client)
+      standardInputParameters.releaseNumber = localReleaseNumber
+      const result = await createDeploymentFromInputs(client, standardInputParameters)
 
-    // The first release in the project, so it should always have 0.0.1
-    expect(result.length).toBe(2)
-    expect(result[0].serverTaskId).toContain('ServerTasks-')
+      // The first release in the project, so it should always have 0.0.1
+      expect(result.length).toBe(2)
+      expect(result[0].serverTaskId).toContain('ServerTasks-')
 
-    expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
+      expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
 
-    // wait for the deployment or the teardown will fail
-    const waiter = new ExecutionWaiter(client, standardInputParameters.space)
-    await waiter.waitForExecutionToComplete(
-      result.map(r => r.serverTaskId),
-      true,
-      '',
-      1000,
-      60000,
-      'deployment'
-    )
+      // wait for the deployment or the teardown will fail
+      const waiter = new ExecutionWaiter(client, standardInputParameters.space)
+      await waiter.waitForExecutionToComplete(
+        result.map(r => r.serverTaskId),
+        true,
+        '',
+        1000,
+        60000,
+        'deployment'
+      )
+    } catch (e: unknown) {
+      console.error(`ERROR ${e}`)
+      console.info('Messages: %s', output.getAllMessages().join('/n'))
+    }
   })
 })

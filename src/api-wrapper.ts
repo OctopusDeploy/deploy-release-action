@@ -35,6 +35,16 @@ export async function createDeploymentFromInputs(
     } queued successfully!`
   )
 
+  if (response.DeploymentServerTasks.length === 0) {
+    throw new Error('Expected at least one deployment to be queued.')
+  }
+  if (
+    response.DeploymentServerTasks[0].serverTaskId === null ||
+    response.DeploymentServerTasks[0].serverTaskId === undefined
+  ) {
+    throw new Error('Server task id was not deserialized correctly.')
+  }
+
   const deploymentIds = response.DeploymentServerTasks.map(x => x.deploymentId)
 
   const deploymentRepository = new DeploymentRepository(client, parameters.space)
