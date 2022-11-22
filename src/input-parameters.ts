@@ -38,9 +38,9 @@ export function getInputParameters(): InputParameters {
     server: getInput('server') || process.env[EnvironmentVariables.URL] || '',
     apiKey: getInput('api_key') || process.env[EnvironmentVariables.ApiKey] || '',
     space: getInput('space') || process.env[EnvironmentVariables.Space] || '',
-    project: getInput('project'),
-    releaseNumber: getInput('release_number'),
-    environments: getMultilineInput('environments').map(p => p.trim()),
+    project: getInput('project', { required: true }),
+    releaseNumber: getInput('release_number', { required: true }),
+    environments: getMultilineInput('environments', { required: true }).map(p => p.trim()),
     useGuidedFailure: getBooleanInput('use_guided_failure') || undefined,
     variables: variablesMap
   }
