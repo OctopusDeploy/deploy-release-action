@@ -17,6 +17,7 @@ import { RunConditionForAction } from '@octopusdeploy/message-contracts/dist/run
 import { setOutput } from '@actions/core'
 import { CaptureOutput } from '../test-helpers'
 import { InputParameters } from '../../src/input-parameters'
+import { ServerTaskDetails } from '@octopusdeploy/api-client/dist/features/serverTasks'
 
 // NOTE: These tests assume Octopus is running and connectable.
 // In the build pipeline they are run as part of a build.yml file which populates
@@ -199,32 +200,30 @@ describe('integration tests', () => {
       logging: logger
     }
 
-    try {
-      const client = await Client.create(config)
+    const client = await Client.create(config)
 
-      await createReleaseForTest(client)
-      standardInputParameters.releaseNumber = localReleaseNumber
-      const result = await createDeploymentFromInputs(client, standardInputParameters)
+    await createReleaseForTest(client)
+    standardInputParameters.releaseNumber = localReleaseNumber
+    const result = await createDeploymentFromInputs(client, standardInputParameters)
 
-      // The first release in the project, so it should always have 0.0.1
-      expect(result.length).toBe(2)
-      expect(result[0].serverTaskId).toContain('ServerTasks-')
+    // The first release in the project, so it should always have 0.0.1
+    expect(result.length).toBe(2)
+    expect(result[0].serverTaskId).toContain('ServerTasks-')
 
-      expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
+    expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
 
-      // wait for the deployment or the teardown will fail
-      const waiter = new ExecutionWaiter(client, standardInputParameters.space)
-      await waiter.waitForExecutionToComplete(
-        result.map(r => r.serverTaskId),
-        true,
-        '',
-        1000,
-        60000,
-        'deployment'
-      )
-    } catch (e: unknown) {
-      console.error(`ERROR ${e}`)
-      console.info('Messages: %s', output.getAllMessages().join('/n'))
-    }
+    // wait for the deployment or the teardown will fail
+    const waiter = new ExecutionWaiter(client, standardInputParameters.space)
+    await waiter.waitForExecutionsToComplete(
+      result.map(r => r.serverTaskId),
+      1000,
+      60000,
+      (serverTaskDetails: ServerTaskDetails): void => {
+        // eslint-disable-next-line no-console
+        console.log(
+          `Waiting for task ${serverTaskDetails.Task.Id}. Current status: ${serverTaskDetails.Task.State}, completed: ${serverTaskDetails.Progress.ProgressPercentage}%`
+        )
+      }
+    )
   })
 })
