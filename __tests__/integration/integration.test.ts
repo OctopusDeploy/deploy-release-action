@@ -13,7 +13,6 @@ import {
   Repository
 } from '@octopusdeploy/api-client'
 import { randomBytes } from 'crypto'
-import { CleanupHelper } from './cleanup-helper'
 import { RunConditionForAction } from '@octopusdeploy/message-contracts/dist/runConditionForAction'
 import { setOutput } from '@actions/core'
 import { CaptureOutput } from '../test-helpers'
@@ -58,8 +57,6 @@ async function createReleaseForTest(client: Client): Promise<void> {
 
 describe('integration tests', () => {
   jest.setTimeout(100000)
-
-  const globalCleanup = new CleanupHelper()
 
   const standardInputParameters: InputParameters = {
     server: apiClientConfig.instanceURL,
@@ -176,7 +173,6 @@ describe('integration tests', () => {
       if (project) {
         await repository.projects.del(project)
       }
-      globalCleanup.cleanup()
     }
   })
 
