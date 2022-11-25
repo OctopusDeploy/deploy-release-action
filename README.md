@@ -1,6 +1,6 @@
-# deploy-release-untenanted-action
+# deploy-release-action
 
-<img alt= "" src="https://github.com/OctopusDeploy/deploy-release-untenanted-action/raw/main/assets/github-actions-octopus.png" />
+<img alt= "" src="https://github.com/OctopusDeploy/deploy-release-action/raw/main/assets/github-actions-octopus.png" />
 
 This is a GitHub Action to deploy a release in [Octopus Deploy](https://octopus.com/).
 
@@ -25,7 +25,7 @@ env:
 steps:
   # ...
   - name: Deploy a release in Octopus Deploy 🐙
-    uses: OctopusDeploy/deploy-release-untenanted-action@v3
+    uses: OctopusDeploy/deploy-release-action@v3
     env:
       OCTOPUS_API_KEY: ${{ secrets.API_KEY  }}
       OCTOPUS_URL: ${{ secrets.SERVER }}

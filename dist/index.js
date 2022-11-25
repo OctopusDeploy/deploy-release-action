@@ -45253,7 +45253,7 @@ const api_wrapper_1 = __nccwpck_require__(34636);
         };
         const parameters = (0, input_parameters_1.getInputParameters)();
         const config = {
-            userAgentApp: 'GitHubActions deploy-release-untenanted-action',
+            userAgentApp: 'GitHubActions deploy-release-action',
             instanceURL: parameters.server,
             apiKey: parameters.apiKey,
             logging: logger
