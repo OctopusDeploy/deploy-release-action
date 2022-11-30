@@ -1,19 +1,25 @@
 import { createDeploymentFromInputs } from '../../src/api-wrapper'
 // we use the Octopus API client to setup and teardown integration test data, it doesn't form part of create-release-action at this point
-import { PackageRequirement, ProjectResource, RunCondition, StartTrigger } from '@octopusdeploy/message-contracts'
 import {
   Client,
   ClientConfiguration,
   CreateReleaseCommandV1,
   DeploymentEnvironment,
+  DeploymentProcessRepository,
   EnvironmentRepository,
   ExecutionWaiter,
+  LifecycleRepository,
   Logger,
-  releaseCreate,
-  Repository
+  PackageRequirement,
+  Project,
+  ProjectGroupRepository,
+  ProjectRepository,
+  ReleaseRepository,
+  RunCondition,
+  RunConditionForAction,
+  StartTrigger
 } from '@octopusdeploy/api-client'
 import { randomBytes } from 'crypto'
-import { RunConditionForAction } from '@octopusdeploy/message-contracts/dist/runConditionForAction'
 import { setOutput } from '@actions/core'
 import { CaptureOutput } from '../test-helpers'
 import { InputParameters } from '../../src/input-parameters'
@@ -49,7 +55,8 @@ async function createReleaseForTest(client: Client): Promise<void> {
     ProjectName: localProjectName
   }
 
-  const allocatedReleaseNumber = await releaseCreate(client, command)
+  const releaseRepository = new ReleaseRepository(client, command.spaceName)
+  const allocatedReleaseNumber = await releaseRepository.create(command)
 
   client.info(`Release ${allocatedReleaseNumber.ReleaseVersion} created successfully!`)
 
@@ -69,22 +76,20 @@ describe('integration tests', () => {
   }
 
   let apiClient: Client
-  let repository: Repository
-  let project: ProjectResource
+  let project: Project
 
   beforeAll(async () => {
-    apiClient = await Client.create({ autoConnect: true, ...apiClientConfig })
-
-    repository = new Repository(apiClient)
+    apiClient = await Client.create(apiClientConfig)
 
     // pre-reqs: We need a project, which needs to have a deployment process
 
-    const projectGroup = (await repository.projectGroups.all())[0]
+    const projectGroup = (await new ProjectGroupRepository(apiClient, standardInputParameters.space).list({ take: 1 }))
+      .Items[0]
     if (!projectGroup) throw new Error("Can't find first projectGroup")
 
     let devEnv: DeploymentEnvironment
     let stagingEnv: DeploymentEnvironment
-    const envRepository = new EnvironmentRepository(apiClient, apiClientConfig.space || 'Default')
+    const envRepository = new EnvironmentRepository(apiClient, standardInputParameters.space)
     let envs = await envRepository.list({ partialName: 'Dev' })
     if (envs.Items.filter(e => e.Name === 'Dev').length === 1) {
       devEnv = envs.Items.filter(e => e.Name === 'Dev')[0]
@@ -98,31 +103,32 @@ describe('integration tests', () => {
       stagingEnv = await envRepository.create({ Name: 'Staging Demo' })
     }
 
-    const lifeCycle = (await repository.lifecycles.all())[0]
-    if (!lifeCycle) throw new Error("Can't find first lifecycle")
-    if (lifeCycle.Phases.length === 0) {
-      lifeCycle.Phases.push({
+    const lifecycleRepository = new LifecycleRepository(apiClient, standardInputParameters.space)
+    const lifecycle = (await lifecycleRepository.list({ take: 1 })).Items[0]
+    if (!lifecycle) throw new Error("Can't find first lifecycle")
+    if (lifecycle.Phases.length === 0) {
+      lifecycle.Phases.push({
         Id: 'test',
         Name: 'Testing',
         OptionalDeploymentTargets: [devEnv.Id, stagingEnv.Id],
-        AutomaticDeploymentTargets: [],
         MinimumEnvironmentsBeforePromotion: 1,
         IsOptionalPhase: false
       })
-      await repository.lifecycles.modify(lifeCycle)
+      await lifecycleRepository.modify(lifecycle)
     }
 
-    project = await repository.projects.create({
+    const projectRepository = new ProjectRepository(apiClient, standardInputParameters.space)
+    project = await projectRepository.create({
       Name: localProjectName,
-      LifecycleId: lifeCycle.Id,
+      LifecycleId: lifecycle.Id,
       ProjectGroupId: projectGroup.Id
     })
 
-    const deploymentProcess = await repository.deploymentProcesses.get(project.DeploymentProcessId, undefined)
+    const deploymentProcessRepository = new DeploymentProcessRepository(apiClient, standardInputParameters.space)
+    const deploymentProcess = await deploymentProcessRepository.get(project)
     deploymentProcess.Steps = [
       {
         Condition: RunCondition.Success,
-        Links: {},
         PackageRequirement: PackageRequirement.LetOctopusDecide,
         StartTrigger: StartTrigger.StartAfterPrevious,
         Id: '',
@@ -154,14 +160,13 @@ describe('integration tests', () => {
               'Octopus.Action.Script.ScriptSource': 'Inline',
               'Octopus.Action.Script.Syntax': 'Bash',
               'Octopus.Action.Script.ScriptBody': "echo 'hello'"
-            },
-            Links: {}
+            }
           }
         ]
       }
     ]
 
-    await repository.deploymentProcesses.saveToProject(project, deploymentProcess)
+    await deploymentProcessRepository.update(project, deploymentProcess)
   })
 
   afterAll(async () => {
@@ -172,7 +177,8 @@ describe('integration tests', () => {
       setOutput('gha_selftest_release_number', localReleaseNumber)
     } else {
       if (project) {
-        await repository.projects.del(project)
+        const projectRepository = new ProjectRepository(apiClient, standardInputParameters.space)
+        await projectRepository.del(project)
       }
     }
   })
