@@ -7,7 +7,6 @@ import {
   DeploymentEnvironment,
   DeploymentProcessRepository,
   EnvironmentRepository,
-  ExecutionWaiter,
   LifecycleRepository,
   Logger,
   PackageRequirement,
@@ -23,7 +22,7 @@ import { randomBytes } from 'crypto'
 import { setOutput } from '@actions/core'
 import { CaptureOutput } from '../test-helpers'
 import { InputParameters } from '../../src/input-parameters'
-import { ServerTaskDetails } from '@octopusdeploy/api-client/dist/features/serverTasks'
+import { ServerTaskDetails, ServerTaskWaiter } from '@octopusdeploy/api-client/dist/features/serverTasks'
 
 // NOTE: These tests assume Octopus is running and connectable.
 // In the build pipeline they are run as part of a build.yml file which populates
@@ -219,8 +218,8 @@ describe('integration tests', () => {
     expect(output.getAllMessages()).toContain(`[INFO] 🎉 2 Deployments queued successfully!`)
 
     // wait for the deployment or the teardown will fail
-    const waiter = new ExecutionWaiter(client, standardInputParameters.space)
-    await waiter.waitForExecutionsToComplete(
+    const waiter = new ServerTaskWaiter(client, standardInputParameters.space)
+    await waiter.waitForServerTasksToComplete(
       result.map(r => r.serverTaskId),
       1000,
       60000,
