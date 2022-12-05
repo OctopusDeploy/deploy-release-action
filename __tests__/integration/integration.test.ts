@@ -38,19 +38,19 @@ import { ServerTaskDetails, ServerTaskWaiter } from '@octopusdeploy/api-client/d
 const apiClientConfig: ClientConfiguration = {
   userAgentApp: 'Test',
   apiKey: process.env.OCTOPUS_TEST_API_KEY || 'API-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  instanceURL: process.env.OCTOPUS_TEST_URL || 'http://localhost:8050',
-  space: process.env.OCTOPUS_TEST_SPACE || 'Default'
+  instanceURL: process.env.OCTOPUS_TEST_URL || 'http://localhost:8050'
 }
 
 const runId = randomBytes(16).toString('hex')
 const localProjectName = `project${runId}`
+const spaceName = process.env.OCTOPUS_TEST_SPACE || 'Default'
 let localReleaseNumber = ''
 
 async function createReleaseForTest(client: Client): Promise<void> {
   client.info('Creating a release in Octopus Deploy...')
 
   const command: CreateReleaseCommandV1 = {
-    spaceName: apiClientConfig.space || 'Default',
+    spaceName,
     ProjectName: localProjectName
   }
 
@@ -68,7 +68,7 @@ describe('integration tests', () => {
   const standardInputParameters: InputParameters = {
     server: apiClientConfig.instanceURL,
     apiKey: apiClientConfig.apiKey,
-    space: apiClientConfig.space || 'Default',
+    space: spaceName,
     project: localProjectName,
     releaseNumber: '',
     environments: ['Dev', 'Staging Demo']
