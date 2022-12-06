@@ -1,0 +1,36 @@
+name: 'Deploy a Release in Octopus Deploy'
+description: 'GitHub Action to deploy a release in Octopus Deploy'
+author: 'Octopus Deploy'
+branding:
+  color: 'blue'
+  icon: 'package'
+
+inputs:
+  project:
+    description: 'The name of the project associated with this release.'
+    required: true
+  release_number:
+    description: 'The number for the release to deploy.'
+    required: true
+  environments:
+    description: 'A multi-line list of environments to deploy to.'
+    required: true
+  use_guided_failure:
+    default: false
+    description: 'Whether to use guided failure mode if errors occur during the deployment.'
+  variables:
+    description: 'A multi-line list of prompted variable values. Format: name:value'
+  server:
+    description: 'The instance URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). The instance URL is required, but you may also use the OCTOPUS_URL environment variable.'
+  api_key:
+    description: 'The API key used to access Octopus Deploy. An API key is required, but you may also use the OCTOPUS_API_KEY environment variable. It is strongly recommended that this value retrieved from a GitHub secret.'
+  space:
+    description: 'The name of a space within which this command will be executed. The space name is required, but you may also use the OCTOPUS_SPACE environment variable.'
+
+outputs:
+  server_tasks:
+    description: 'JSON string for an array of objects having a `serverTaskId` and an `environmentName`'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
