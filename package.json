@@ -1,7 +1,7 @@
 {
   "author": "Octopus Deploy",
   "bugs": {
-    "url": "https://github.com/OctopusDeploy/deploy-release-untenanted-action/issues"
+    "url": "https://github.com/OctopusDeploy/deploy-release-action/issues"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
@@ -13,7 +13,7 @@
     "@types/jest": "^29.2.4",
     "@types/json-patch": "^0.0.30",
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.11.13",
+    "@types/node": "^18.11.14",
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/parser": "^5.46.1",
     "@vercel/ncc": "^0.36.0",
@@ -29,7 +29,7 @@
     "ts-jest": "^29.0.3",
     "typescript": "^4.9.4"
   },
-  "homepage": "https://github.com/OctopusDeploy/deploy-release-untenanted-action#readme",
+  "homepage": "https://github.com/OctopusDeploy/deploy-release-action#readme",
   "jest": {
     "clearMocks": true,
     "collectCoverage": true,
@@ -68,10 +68,10 @@
   ],
   "license": "Apache-2.0",
   "main": "src/index.ts",
-  "name": "deploy-release-untenanted-action",
+  "name": "deploy-release-action",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OctopusDeploy/deploy-release-untenanted-action.git"
+    "url": "git+https://github.com/OctopusDeploy/deploy-release-action.git"
   },
   "scripts": {
     "all": "npm run format && npm run build && npm test",
