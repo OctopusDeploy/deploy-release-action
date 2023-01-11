@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.0.0...v3.0.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* Fixed issue with prompted variable serialization ([#8](https://github.com/OctopusDeploy/deploy-release-action/issues/8)) ([e2116e9](https://github.com/OctopusDeploy/deploy-release-action/commit/e2116e9989820fe263e8481da9ffeb0dcb8c2bf1))
+
 ## 3.0.0 (2022-12-13)
 
 
