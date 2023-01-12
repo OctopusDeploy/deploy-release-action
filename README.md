@@ -33,12 +33,12 @@ steps:
     with:
       project: 'MyProject'
       release_version: '1.0.0'
-      environments: [ |
-        'Dev'
-        'Test']
-      variables: [ |
-        'Foo: Bar'
-        'Fizz: Buzz']
+      environments: |
+        Dev
+        Test
+      variables: |
+        Foo: Bar
+        Fizz: Buzz
 ```
 
 ## ✍️ Environment Variables
