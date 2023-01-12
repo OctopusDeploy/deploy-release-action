@@ -34,11 +34,11 @@ steps:
       project: 'MyProject'
       release_version: '1.0.0'
       environments: |
-        'Dev'
-        'Test'
+        Dev
+        Test
       variables: |
-        'Foo: Bar'
-        'Fizz: Buzz'
+        Foo: Bar
+        Fizz: Buzz
 ```
 
 ## ✍️ Environment Variables
