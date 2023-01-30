@@ -16,13 +16,14 @@ import {
   ReleaseRepository,
   RunCondition,
   RunConditionForAction,
-  StartTrigger
+  ServerTask,
+  StartTrigger,
+  ServerTaskWaiter
 } from '@octopusdeploy/api-client'
 import { randomBytes } from 'crypto'
 import { setOutput } from '@actions/core'
 import { CaptureOutput } from '../test-helpers'
 import { InputParameters } from '../../src/input-parameters'
-import { ServerTaskDetails, ServerTaskWaiter } from '@octopusdeploy/api-client/dist/features/serverTasks'
 
 // NOTE: These tests assume Octopus is running and connectable.
 // In the build pipeline they are run as part of a build.yml file which populates
@@ -223,10 +224,10 @@ describe('integration tests', () => {
       result.map(r => r.serverTaskId),
       1000,
       60000,
-      (serverTaskDetails: ServerTaskDetails): void => {
+      (serverTask: ServerTask): void => {
         // eslint-disable-next-line no-console
         console.log(
-          `Waiting for task ${serverTaskDetails.Task.Id}. Current status: ${serverTaskDetails.Task.State}, completed: ${serverTaskDetails.Progress.ProgressPercentage}%`
+          `Waiting for task ${serverTask.Id}. Current status: ${serverTask.State}`
         )
       }
     )
