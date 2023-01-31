@@ -32,7 +32,7 @@ steps:
       OCTOPUS_SPACE: 'Outer Space'
     with:
       project: 'MyProject'
-      release_version: '1.0.0'
+      release_number: '1.0.0'
       environments: |
         Dev
         Test
