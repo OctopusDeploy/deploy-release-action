@@ -2834,6 +2834,107 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 /***/ }),
 
+/***/ 9849:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkForCapability = void 0;
+var apiLocation_1 = __nccwpck_require__(7083);
+var octopusError_1 = __nccwpck_require__(408);
+function checkForCapability(client, capabilityName, minimumVersionThisWouldAppearIn) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, client.get("".concat(apiLocation_1.apiLocation, "/capabilities"))];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, response.Capabilities.filter(function (c) { return c === capabilityName; }).length === 1
+                            ? null
+                            : "The Octopus instance does not support ".concat(capabilityName, ", it needs to be at least version ").concat(minimumVersionThisWouldAppearIn, " to get access to the feature you are trying to use.")];
+                case 2:
+                    e_1 = _a.sent();
+                    if (e_1 instanceof octopusError_1.OctopusError) {
+                        if (e_1.StatusCode && e_1.StatusCode != 200) {
+                            return [2 /*return*/, "The Octopus instance does not support the Capabilities API, you will need to upgrade it at least 2022.3 to get access to the feature you are trying to use."];
+                        }
+                    }
+                    return [2 /*return*/, "Unknown error occurred trying to determine if the Octopus instance supports ".concat(capabilityName, ".")];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.checkForCapability = checkForCapability;
+
+
+/***/ }),
+
+/***/ 4615:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(9849), exports);
+
+
+/***/ }),
+
 /***/ 8318:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -3284,6 +3385,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__nccwpck_require__(8304), exports);
+__exportStar(__nccwpck_require__(4615), exports);
 __exportStar(__nccwpck_require__(7206), exports);
 __exportStar(__nccwpck_require__(599), exports);
 __exportStar(__nccwpck_require__(4979), exports);
@@ -5104,15 +5206,22 @@ var DeploymentRepository = /** @class */ (function () {
         return this.client.request("".concat(this.baseApiPathTemplate, "{?skip,take,ids,projects,environments,tenants,channels,taskState}"), __assign({ spaceName: this.spaceName }, args));
     };
     DeploymentRepository.prototype.create = function (command) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response, mappedTasks;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
+            var capabilityError, response, mappedTasks;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, (0, __1.checkForCapability)(this.client, "CreateDeploymentUntenantedCommandV1", "2022.3")];
+                    case 1:
+                        capabilityError = _c.sent();
+                        if (capabilityError) {
+                            (_b = (_a = this.client).error) === null || _b === void 0 ? void 0 : _b.call(_a, capabilityError);
+                            throw new Error(capabilityError);
+                        }
                         this.client.debug("Deploying a release...");
                         return [4 /*yield*/, this.client.doCreate("".concat(this.baseApiPathTemplate, "/create/untenanted/v1"), __assign({ spaceIdOrName: command.spaceName }, command))];
-                    case 1:
-                        response = _a.sent();
+                    case 2:
+                        response = _c.sent();
                         if (response.DeploymentServerTasks.length == 0) {
                             throw new Error("No server task details returned");
                         }
@@ -5131,15 +5240,22 @@ var DeploymentRepository = /** @class */ (function () {
         });
     };
     DeploymentRepository.prototype.createTenanted = function (command) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response, mappedTasks;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
+            var capabilityError, response, mappedTasks;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, (0, __1.checkForCapability)(this.client, "CreateDeploymentTenantedCommandV1", "2022.3")];
+                    case 1:
+                        capabilityError = _c.sent();
+                        if (capabilityError) {
+                            (_b = (_a = this.client).error) === null || _b === void 0 ? void 0 : _b.call(_a, capabilityError);
+                            throw new Error(capabilityError);
+                        }
                         this.client.debug("Deploying a tenanted release...");
                         return [4 /*yield*/, this.client.doCreate("".concat(this.baseApiPathTemplate, "/create/tenanted/v1"), __assign({ spaceIdOrName: command.spaceName }, command))];
-                    case 1:
-                        response = _a.sent();
+                    case 2:
+                        response = _c.sent();
                         if (response.DeploymentServerTasks.length == 0) {
                             throw new Error("No server task details returned");
                         }
@@ -5303,15 +5419,22 @@ var ReleaseRepository = /** @class */ (function () {
         this.spaceName = spaceName;
     }
     ReleaseRepository.prototype.create = function (command) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
+            var capabilityError, response;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, (0, __1.checkForCapability)(this.client, "CreateReleaseCommandV1", "2022.3")];
+                    case 1:
+                        capabilityError = _c.sent();
+                        if (capabilityError) {
+                            (_b = (_a = this.client).error) === null || _b === void 0 ? void 0 : _b.call(_a, capabilityError);
+                            throw new Error(capabilityError);
+                        }
                         this.client.debug("Creating a release...");
                         return [4 /*yield*/, this.client.doCreate("".concat(__1.spaceScopedRoutePrefix, "/releases/create/v1"), __assign({ spaceIdOrName: command.spaceName }, command))];
-                    case 1:
-                        response = _a.sent();
+                    case 2:
+                        response = _c.sent();
                         this.client.debug("Release created successfully.");
                         return [2 /*return*/, response];
                 }
@@ -5743,6 +5866,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RunbookRunRepository = void 0;
 var spaceScopedRoutePrefix_1 = __nccwpck_require__(7218);
+var capabilities_1 = __nccwpck_require__(4615);
 var RunbookRunRepository = /** @class */ (function () {
     function RunbookRunRepository(client, spaceName) {
         this.baseApiPathTemplate = "".concat(spaceScopedRoutePrefix_1.spaceScopedRoutePrefix, "/runbookRuns");
@@ -5756,15 +5880,22 @@ var RunbookRunRepository = /** @class */ (function () {
         return this.client.request("".concat(this.baseApiPathTemplate, "{?skip,take,ids,projects,environments,tenants,runbooks,taskState,partialName}"), __assign({ spaceName: this.spaceName }, args));
     };
     RunbookRunRepository.prototype.create = function (command) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response, mappedTasks;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
+            var capabilityError, response, mappedTasks;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, (0, capabilities_1.checkForCapability)(this.client, "CreateRunbookRunCommandV1", "2022.3")];
+                    case 1:
+                        capabilityError = _c.sent();
+                        if (capabilityError) {
+                            (_b = (_a = this.client).error) === null || _b === void 0 ? void 0 : _b.call(_a, capabilityError);
+                            throw new Error(capabilityError);
+                        }
                         this.client.debug("Running a runbook...");
                         return [4 /*yield*/, this.client.doCreate("".concat(spaceScopedRoutePrefix_1.spaceScopedRoutePrefix, "/runbook-runs/create/v1"), __assign({ spaceIdOrName: command.spaceName }, command))];
-                    case 1:
-                        response = _a.sent();
+                    case 2:
+                        response = _c.sent();
                         if (response.RunbookRunServerTasks.length == 0) {
                             throw new Error("No server task details returned");
                         }
@@ -5955,48 +6086,41 @@ var ServerTaskWaiter = /** @class */ (function () {
     }
     ServerTaskWaiter.prototype.waitForServerTasksToComplete = function (serverTaskIds, statusCheckSleepCycle, timeout, pollingCallback) {
         return __awaiter(this, void 0, void 0, function () {
-            var spaceServerTaskRepository, taskPromises, serverTaskIds_1, serverTaskIds_1_1, serverTaskId;
-            var e_1, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        spaceServerTaskRepository = new serverTasks_1.SpaceServerTaskRepository(this.client, this.spaceName);
-                        taskPromises = [];
-                        try {
-                            for (serverTaskIds_1 = __values(serverTaskIds), serverTaskIds_1_1 = serverTaskIds_1.next(); !serverTaskIds_1_1.done; serverTaskIds_1_1 = serverTaskIds_1.next()) {
-                                serverTaskId = serverTaskIds_1_1.value;
-                                taskPromises.push(this.waitForTask(spaceServerTaskRepository, serverTaskId, statusCheckSleepCycle, timeout, pollingCallback));
-                            }
-                        }
-                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                        finally {
-                            try {
-                                if (serverTaskIds_1_1 && !serverTaskIds_1_1.done && (_a = serverTaskIds_1.return)) _a.call(serverTaskIds_1);
-                            }
-                            finally { if (e_1) throw e_1.error; }
-                        }
-                        return [4 /*yield*/, Promise.allSettled(taskPromises)];
-                    case 1: return [2 /*return*/, _b.sent()];
-                }
+            var spaceServerTaskRepository;
+            return __generator(this, function (_a) {
+                spaceServerTaskRepository = new serverTasks_1.SpaceServerTaskRepository(this.client, this.spaceName);
+                return [2 /*return*/, this.waitForTasks(spaceServerTaskRepository, serverTaskIds, statusCheckSleepCycle, timeout, pollingCallback)];
             });
         });
     };
     ServerTaskWaiter.prototype.waitForServerTaskToComplete = function (serverTaskId, statusCheckSleepCycle, timeout, pollingCallback) {
         return __awaiter(this, void 0, void 0, function () {
-            var spaceServerTaskRepository;
+            var spaceServerTaskRepository, tasks;
             return __generator(this, function (_a) {
-                spaceServerTaskRepository = new serverTasks_1.SpaceServerTaskRepository(this.client, this.spaceName);
-                return [2 /*return*/, this.waitForTask(spaceServerTaskRepository, serverTaskId, statusCheckSleepCycle, timeout, pollingCallback)];
+                switch (_a.label) {
+                    case 0:
+                        spaceServerTaskRepository = new serverTasks_1.SpaceServerTaskRepository(this.client, this.spaceName);
+                        return [4 /*yield*/, this.waitForTasks(spaceServerTaskRepository, [serverTaskId], statusCheckSleepCycle, timeout, pollingCallback)];
+                    case 1:
+                        tasks = _a.sent();
+                        return [2 /*return*/, tasks[0]];
+                }
             });
         });
     };
-    ServerTaskWaiter.prototype.waitForTask = function (spaceServerTaskRepository, serverTaskId, statusCheckSleepCycle, timeout, pollingCallback) {
+    ServerTaskWaiter.prototype.waitForTasks = function (spaceServerTaskRepository, serverTaskIds, statusCheckSleepCycle, timeout, pollingCallback) {
         return __awaiter(this, void 0, void 0, function () {
-            var sleep, stop, t, taskDetails, task;
+            var sleep, stop, t, completedTasks, _loop_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        // short circuit if no ids are passed. Sending an empty array to server here
+                        // doesn't do what you may expect. To server, no ids == return every task the user
+                        // has permission to see
+                        if (serverTaskIds.length === 0) {
+                            return [2 /*return*/, []];
+                        }
                         sleep = function (ms) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/, new Promise(function (r) { return setTimeout(r, ms); })];
                         }); }); };
@@ -6004,37 +6128,67 @@ var ServerTaskWaiter = /** @class */ (function () {
                         t = setTimeout(function () {
                             stop = true;
                         }, timeout);
+                        completedTasks = [];
+                        _loop_1 = function () {
+                            var tasks_2, unknownTaskIds, nowCompletedTaskIds_1, tasks_1, tasks_1_1, task;
+                            var e_1, _b;
+                            return __generator(this, function (_c) {
+                                switch (_c.label) {
+                                    case 0:
+                                        _c.trys.push([0, , 2, 3]);
+                                        return [4 /*yield*/, spaceServerTaskRepository.getByIds(serverTaskIds)];
+                                    case 1:
+                                        tasks_2 = _c.sent();
+                                        unknownTaskIds = serverTaskIds.filter(function (id) { return tasks_2.filter(function (t) { return t.Id === id; }).length == 0; });
+                                        if (unknownTaskIds.length) {
+                                            throw new Error("Unknown task Id(s) ".concat(unknownTaskIds.join(", ")));
+                                        }
+                                        nowCompletedTaskIds_1 = [];
+                                        try {
+                                            for (tasks_1 = (e_1 = void 0, __values(tasks_2)), tasks_1_1 = tasks_1.next(); !tasks_1_1.done; tasks_1_1 = tasks_1.next()) {
+                                                task = tasks_1_1.value;
+                                                if (pollingCallback) {
+                                                    pollingCallback(task);
+                                                }
+                                                // once the task is complete
+                                                if (task.IsCompleted) {
+                                                    nowCompletedTaskIds_1.push(task.Id);
+                                                    completedTasks.push(task);
+                                                }
+                                            }
+                                        }
+                                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                                        finally {
+                                            try {
+                                                if (tasks_1_1 && !tasks_1_1.done && (_b = tasks_1.return)) _b.call(tasks_1);
+                                            }
+                                            finally { if (e_1) throw e_1.error; }
+                                        }
+                                        // filter down the ids to only those that haven't completed for the next time around the loop
+                                        serverTaskIds = serverTaskIds.filter(function (id) { return nowCompletedTaskIds_1.indexOf(id) < 0; });
+                                        // once all tasks have completed we can stop the loop
+                                        if (serverTaskIds.length === 0 || tasks_2.length === 0) {
+                                            stop = true;
+                                        }
+                                        return [3 /*break*/, 3];
+                                    case 2:
+                                        clearTimeout(t);
+                                        return [7 /*endfinally*/];
+                                    case 3: return [4 /*yield*/, sleep(statusCheckSleepCycle)];
+                                    case 4:
+                                        _c.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        };
                         _a.label = 1;
                     case 1:
-                        if (!!stop) return [3 /*break*/, 10];
-                        _a.label = 2;
+                        if (!!stop) return [3 /*break*/, 3];
+                        return [5 /*yield**/, _loop_1()];
                     case 2:
-                        _a.trys.push([2, , 7, 8]);
-                        if (!pollingCallback) return [3 /*break*/, 4];
-                        return [4 /*yield*/, spaceServerTaskRepository.getDetails(serverTaskId)];
-                    case 3:
-                        taskDetails = _a.sent();
-                        pollingCallback(taskDetails);
-                        if (taskDetails.Task.IsCompleted) {
-                            return [2 /*return*/, taskDetails.Task];
-                        }
-                        return [3 /*break*/, 6];
-                    case 4: return [4 /*yield*/, spaceServerTaskRepository.getById(serverTaskId)];
-                    case 5:
-                        task = _a.sent();
-                        if (task.IsCompleted) {
-                            return [2 /*return*/, task];
-                        }
-                        _a.label = 6;
-                    case 6: return [3 /*break*/, 8];
-                    case 7:
-                        clearTimeout(t);
-                        return [7 /*endfinally*/];
-                    case 8: return [4 /*yield*/, sleep(statusCheckSleepCycle)];
-                    case 9:
                         _a.sent();
                         return [3 /*break*/, 1];
-                    case 10: return [2 /*return*/, null];
+                    case 3: return [2 /*return*/, completedTasks];
                 }
             });
         });
@@ -13395,6 +13549,12 @@ function setopts (self, pattern, options) {
     pattern = "**/" + pattern
   }
 
+  self.windowsPathsNoEscape = !!options.windowsPathsNoEscape ||
+    options.allowWindowsEscape === false
+  if (self.windowsPathsNoEscape) {
+    pattern = pattern.replace(/\\/g, '/')
+  }
+
   self.silent = !!options.silent
   self.pattern = pattern
   self.strict = options.strict !== false
@@ -13450,8 +13610,6 @@ function setopts (self, pattern, options) {
   // Note that they are not supported in Glob itself anyway.
   options.nonegate = true
   options.nocomment = true
-  // always treat \ in patterns as escapes, not path separators
-  options.allowWindowsEscape = true
 
   self.minimatch = new Minimatch(pattern, options)
   self.options = self.minimatch.options
@@ -15030,7 +15188,7 @@ class Minimatch {
     if (pattern === '') return ''
 
     let re = ''
-    let hasMagic = !!options.nocase
+    let hasMagic = false
     let escaping = false
     // ? => one single character
     const patternListStack = []
@@ -15043,11 +15201,23 @@ class Minimatch {
     let pl
     let sp
     // . and .. never match anything that doesn't start with .,
-    // even when options.dot is set.
-    const patternStart = pattern.charAt(0) === '.' ? '' // anything
-    // not (start or / followed by . or .. followed by / or end)
-    : options.dot ? '(?!(?:^|\\\/)\\.{1,2}(?:$|\\\/))'
-    : '(?!\\.)'
+    // even when options.dot is set.  However, if the pattern
+    // starts with ., then traversal patterns can match.
+    let dotTravAllowed = pattern.charAt(0) === '.'
+    let dotFileAllowed = options.dot || dotTravAllowed
+    const patternStart = () =>
+      dotTravAllowed
+        ? ''
+        : dotFileAllowed
+        ? '(?!(?:^|\\/)\\.{1,2}(?:$|\\/))'
+        : '(?!\\.)'
+    const subPatternStart = (p) =>
+      p.charAt(0) === '.'
+        ? ''
+        : options.dot
+        ? '(?!(?:^|\\/)\\.{1,2}(?:$|\\/))'
+        : '(?!\\.)'
+
 
     const clearStateChar = () => {
       if (stateChar) {
@@ -15136,7 +15306,7 @@ class Minimatch {
           if (options.noext) clearStateChar()
         continue
 
-        case '(':
+        case '(': {
           if (inClass) {
             re += '('
             continue
@@ -15147,46 +15317,64 @@ class Minimatch {
             continue
           }
 
-          patternListStack.push({
+          const plEntry = {
             type: stateChar,
             start: i - 1,
             reStart: re.length,
             open: plTypes[stateChar].open,
-            close: plTypes[stateChar].close
-          })
-          // negation is (?:(?!js)[^/]*)
-          re += stateChar === '!' ? '(?:(?!(?:' : '(?:'
+            close: plTypes[stateChar].close,
+          }
+          this.debug(this.pattern, '\t', plEntry)
+          patternListStack.push(plEntry)
+          // negation is (?:(?!(?:js)(?:<rest>))[^/]*)
+          re += plEntry.open
+          // next entry starts with a dot maybe?
+          if (plEntry.start === 0 && plEntry.type !== '!') {
+            dotTravAllowed = true
+            re += subPatternStart(pattern.slice(i + 1))
+          }
           this.debug('plType %j %j', stateChar, re)
           stateChar = false
-        continue
+          continue
+        }
 
-        case ')':
-          if (inClass || !patternListStack.length) {
+        case ')': {
+          const plEntry = patternListStack[patternListStack.length - 1]
+          if (inClass || !plEntry) {
             re += '\\)'
             continue
           }
+          patternListStack.pop()
 
+          // closing an extglob
           clearStateChar()
           hasMagic = true
-          pl = patternListStack.pop()
+          pl = plEntry
           // negation is (?:(?!js)[^/]*)
           // The others are (?:<pattern>)<type>
           re += pl.close
           if (pl.type === '!') {
-            negativeLists.push(pl)
+            negativeLists.push(Object.assign(pl, { reEnd: re.length }))
           }
-          pl.reEnd = re.length
-        continue
+          continue
+        }
 
-        case '|':
-          if (inClass || !patternListStack.length) {
+        case '|': {
+          const plEntry = patternListStack[patternListStack.length - 1]
+          if (inClass || !plEntry) {
             re += '\\|'
             continue
           }
 
           clearStateChar()
           re += '|'
-        continue
+          // next subpattern can start with a dot?
+          if (plEntry.start === 0 && plEntry.type !== '!') {
+            dotTravAllowed = true
+            re += subPatternStart(pattern.slice(i + 1))
+          }
+          continue
+        }
 
         // these are mostly the same in regexp and glob
         case '[':
@@ -15325,14 +15513,16 @@ class Minimatch {
       // Handle nested stuff like *(*.js|!(*.json)), where open parens
       // mean that we should *not* include the ) in the bit that is considered
       // "after" the negated section.
-      const openParensBefore = nlBefore.split('(').length - 1
+      const closeParensBefore = nlBefore.split(')').length
+      const openParensBefore = nlBefore.split('(').length - closeParensBefore
       let cleanAfter = nlAfter
       for (let i = 0; i < openParensBefore; i++) {
         cleanAfter = cleanAfter.replace(/\)[+*?]?/, '')
       }
       nlAfter = cleanAfter
 
-      const dollar = nlAfter === '' && isSub !== SUBPARSE ? '$' : ''
+      const dollar = nlAfter === '' && isSub !== SUBPARSE ? '(?:$|\\/)' : ''
+
       re = nlBefore + nlFirst + nlAfter + dollar + nlLast
     }
 
@@ -15344,12 +15534,17 @@ class Minimatch {
     }
 
     if (addPatternStart) {
-      re = patternStart + re
+      re = patternStart() + re
     }
 
     // parsing just a piece of a larger pattern.
     if (isSub === SUBPARSE) {
       return [re, hasMagic]
+    }
+
+    // if it's nocase, and the lcase/uppercase don't match, it's magic
+    if (options.nocase && !hasMagic) {
+      hasMagic = pattern.toUpperCase() !== pattern.toLowerCase()
     }
 
     // skip the regexp for non-magical patterns
@@ -38984,7 +39179,7 @@ const api_wrapper_1 = __nccwpck_require__(4636);
         };
         const parameters = (0, input_parameters_1.getInputParameters)();
         const config = {
-            userAgentApp: 'GitHubActions deploy-release-action',
+            userAgentApp: 'GitHubActions (release;deploy;v3)',
             instanceURL: parameters.server,
             apiKey: parameters.apiKey,
             logging: logger
@@ -39202,7 +39397,7 @@ module.exports = require("zlib");
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-// Axios v1.2.2 Copyright (c) 2022 Matt Zabriskie and contributors
+// Axios v1.2.6 Copyright (c) 2023 Matt Zabriskie and contributors
 
 
 const FormData$1 = __nccwpck_require__(4334);
@@ -40993,7 +41188,7 @@ class AxiosHeaders {
   }
 }
 
-AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent']);
+AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent', 'Authorization']);
 
 utils.freezeMethods(AxiosHeaders.prototype);
 utils.freezeMethods(AxiosHeaders);
@@ -41115,7 +41310,7 @@ function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 }
 
-const VERSION = "1.2.2";
+const VERSION = "1.2.6";
 
 function parseProtocol(url) {
   const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
