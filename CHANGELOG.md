@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.0.2...v3.0.3) (2023-02-06)
+
+
+### Bug Fixes
+
+* Fixed a bug with the capability API checks ([26b5c4d](https://github.com/OctopusDeploy/deploy-release-action/commit/26b5c4de848307dfa24784e283bda428ebd597da))
+
 ## [3.0.2](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.0.1...v3.0.2) (2023-02-01)
 
 
