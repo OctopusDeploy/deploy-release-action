@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.4](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.0.3...v3.0.4) (2023-04-20)
+
+
+### Bug Fixes
+
+* incorrectly error when server version is checked ([76ed7df](https://github.com/OctopusDeploy/deploy-release-action/commit/76ed7dfe25024405384d225daee3eea067b70c05))
+
 ## [3.0.3](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.0.2...v3.0.3) (2023-02-06)
 
 
