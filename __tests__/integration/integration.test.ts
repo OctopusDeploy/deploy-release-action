@@ -226,9 +226,7 @@ describe('integration tests', () => {
       60000,
       (serverTask: ServerTask): void => {
         // eslint-disable-next-line no-console
-        console.log(
-          `Waiting for task ${serverTask.Id}. Current status: ${serverTask.State}`
-        )
+        console.log(`Waiting for task ${serverTask.Id}. Current status: ${serverTask.State}`)
       }
     )
   })
