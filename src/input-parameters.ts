@@ -56,7 +56,7 @@ export function getInputParameters(): InputParameters {
       "The Octopus instance URL is required, please specify explicitly through the 'server' input or set the OCTOPUS_URL environment variable."
     )
   }
-
+// temp: Make github run things
   if (!parameters.apiKey && !parameters.accessToken) {
     errors.push(
       "The Octopus API Key is required, please specify explicitly through the 'api_key' input or set the OCTOPUS_API_KEY environment variable."
