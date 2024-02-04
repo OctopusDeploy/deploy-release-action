@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.2.1](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.0...v3.2.1) (2024-02-04)
+
+
+### Bug Fixes
+
+* **deps:** pin dependencies ([cfcc562](https://github.com/OctopusDeploy/deploy-release-action/commit/cfcc562b5ad0b7d9c3e9d100b93f5adc5d651401))
+* **deps:** update dependency @actions/core to v1.10.1 ([74556c0](https://github.com/OctopusDeploy/deploy-release-action/commit/74556c0b67348d237e089a4b8bb322af3e0bfaa2))
+
 ## [3.2.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.1.0...v3.2.0) (2023-12-14)
 
 
