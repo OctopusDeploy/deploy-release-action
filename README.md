@@ -4,6 +4,9 @@
 
 This is a GitHub Action to deploy a release in [Octopus Deploy](https://octopus.com/).
 
+> [!IMPORTANT]
+> As of **v3** of this action, Octopus Server version `2022.3.5512` or newer is required.
+
 ## Deployments in Octopus Deploy
 
 A release is a snapshot of the deployment process and the associated assets (packages, scripts, variables) as they existed when the release was created. The release is given a version number, and you can deploy that release as many times as you need to, even if parts of the deployment process have changed since the release was created (those changes will be included in future releases but not in this version).
