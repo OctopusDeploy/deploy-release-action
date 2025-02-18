@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.2](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.1...v3.2.2) (2025-02-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @octopusdeploy/api-client to v3.5.1 ([b556dd3](https://github.com/OctopusDeploy/deploy-release-action/commit/b556dd3c41757af766b14ba743186943595c3cd3))
+
 ## [3.2.1](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.0...v3.2.1) (2024-02-04)
 
 
