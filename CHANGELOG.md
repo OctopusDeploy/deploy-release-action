@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.3](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.2...v3.2.3) (2025-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @actions/core to v1.11.1 ([bcc7c52](https://github.com/OctopusDeploy/deploy-release-action/commit/bcc7c5215a1f031758f08476a17d50d6dde9f025))
+
 ## [3.2.2](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.1...v3.2.2) (2025-02-18)
 
 
