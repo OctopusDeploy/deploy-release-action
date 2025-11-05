@@ -53,6 +53,13 @@ export async function createDeploymentFromInputs(
   const envRepository = new EnvironmentRepository(client, parameters.space)
   const environments = await envRepository.list({ ids: envIds, take: envIds.length })
 
+  envIds.map(envId => {
+    client.info(`envId ${envId}`)
+  })
+  environments.Items.map(environment => {
+    client.info(`environment name ${environment.Name}`)
+  })
+
   const results = response.DeploymentServerTasks.map(x => {
     return {
       serverTaskId: x.ServerTaskId,
