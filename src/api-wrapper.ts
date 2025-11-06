@@ -1,9 +1,10 @@
-import { EnvironmentV2Repository } from './environment-v2-repository'
+// import { EnvironmentV2Repository } from './environment-v2-repository'
 import { InputParameters } from './input-parameters'
 import {
   Client,
   CreateDeploymentUntenantedCommandV1,
   EnvironmentRepository,
+  EnvironmentV2Repository,
   DeploymentRepository,
   DeploymentEnvironmentV2,
   DeploymentEnvironment,
