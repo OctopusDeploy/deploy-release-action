@@ -44708,8 +44708,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createDeploymentFromInputs = void 0;
+const environment_v2_repository_1 = __nccwpck_require__(7988);
 const api_client_1 = __nccwpck_require__(1212);
 function createDeploymentFromInputs(client, parameters) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         client.info('🐙 Deploying a release in Octopus Deploy...');
         const command = {
@@ -44733,14 +44735,22 @@ function createDeploymentFromInputs(client, parameters) {
         const deploymentIds = response.DeploymentServerTasks.map(x => x.DeploymentId);
         const deployments = yield deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length });
         const envIds = deployments.Items.map(d => d.EnvironmentId);
-        const envRepository = new api_client_1.EnvironmentRepository(client, parameters.space);
-        const environments = yield envRepository.list({ ids: envIds, take: envIds.length });
-        envIds.map(envId => {
-            client.info(`envId ${envId}`);
-        });
-        environments.Items.map(environment => {
-            client.info(`environment name ${environment.Name}`);
-        });
+        let environments;
+        const environmentsV2Repository = new environment_v2_repository_1.EnvironmentV2Repository(client, parameters.space); // can dodgey this up!!! Can push this up and test the action :D
+        try {
+            environments = yield environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
+        }
+        catch (error) {
+            // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if (((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.status) === 404) {
+                const envRepository = new api_client_1.EnvironmentRepository(client, parameters.space);
+                environments = yield envRepository.list({ ids: envIds, take: envIds.length });
+            }
+            else {
+                throw error;
+            }
+        }
         const results = response.DeploymentServerTasks.map(x => {
             return {
                 serverTaskId: x.ServerTaskId,
@@ -44751,6 +44761,39 @@ function createDeploymentFromInputs(client, parameters) {
     });
 }
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
+
+
+/***/ }),
+
+/***/ 7988:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EnvironmentV2Repository = void 0;
+const api_client_1 = __nccwpck_require__(1212);
+class EnvironmentV2Repository {
+    constructor(client, spaceName) {
+        this.client = client;
+        this.spaceName = spaceName;
+    }
+    list(args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.client.request(`${api_client_1.spaceScopedRoutePrefix}/environments/v2{?ids,partialName,skip,take}`, Object.assign({ spaceName: this.spaceName }, args));
+        });
+    }
+}
+exports.EnvironmentV2Repository = EnvironmentV2Repository;
 
 
 /***/ }),

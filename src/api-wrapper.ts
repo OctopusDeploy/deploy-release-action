@@ -1,9 +1,13 @@
+import { EnvironmentV2Repository } from './environment-v2-repository'
 import { InputParameters } from './input-parameters'
 import {
   Client,
   CreateDeploymentUntenantedCommandV1,
   EnvironmentRepository,
-  DeploymentRepository
+  DeploymentRepository,
+  DeploymentEnvironmentV2,
+  DeploymentEnvironment,
+  ResourceCollection
 } from '@octopusdeploy/api-client'
 
 export interface DeploymentResult {
@@ -50,15 +54,20 @@ export async function createDeploymentFromInputs(
   const deployments = await deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length })
 
   const envIds = deployments.Items.map(d => d.EnvironmentId)
-  const envRepository = new EnvironmentRepository(client, parameters.space)
-  const environments = await envRepository.list({ ids: envIds, take: envIds.length })
-
-  envIds.map(envId => {
-    client.info(`envId ${envId}`)
-  })
-  environments.Items.map(environment => {
-    client.info(`environment name ${environment.Name}`)
-  })
+  let environments: ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>
+  const environmentsV2Repository = new EnvironmentV2Repository(client, parameters.space) // can dodgey this up!!! Can push this up and test the action :D
+  try {
+    environments = await environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
+  } catch (error) {
+    // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((error as any)?.response?.status === 404) {
+      const envRepository = new EnvironmentRepository(client, parameters.space)
+      environments = await envRepository.list({ ids: envIds, take: envIds.length })
+    } else {
+      throw error
+    }
+  }
 
   const results = response.DeploymentServerTasks.map(x => {
     return {
