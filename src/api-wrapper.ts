@@ -75,7 +75,7 @@ export async function createDeploymentFromInputs(
     }
   }
 
-  client.info(`response.DeploymentServerTasks: ${response.DeploymentServerTasks}`)
+  response.DeploymentServerTasks.map(x => client.info(`response.DeploymentServerTasks: ${x.ServerTaskId}`))
 
   // if result is empty array, do the stuff in the catch block
   // put massive comment - comapatability issue with the support for multiple id parameters
@@ -89,7 +89,7 @@ export async function createDeploymentFromInputs(
     }
   })
 
-  client.info(`results: ${results}`)
+  results.map(x => client.info(`results: ${x.environmentName} - ${x.serverTaskId}`))
 
   return results
 }

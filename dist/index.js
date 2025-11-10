@@ -44829,7 +44829,7 @@ function createDeploymentFromInputs(client, parameters) {
                 throw error;
             }
         }
-        client.info(`response.DeploymentServerTasks: ${response.DeploymentServerTasks}`);
+        response.DeploymentServerTasks.map(x => client.info(`response.DeploymentServerTasks: ${x.ServerTaskId}`));
         // if result is empty array, do the stuff in the catch block
         // put massive comment - comapatability issue with the support for multiple id parameters
         const results = response.DeploymentServerTasks.map(x => {
@@ -44838,7 +44838,7 @@ function createDeploymentFromInputs(client, parameters) {
                 environmentName: environments.Items.filter(e => e.Id === deployments.Items.filter(d => d.TaskId === x.ServerTaskId)[0].EnvironmentId)[0].Name
             };
         });
-        client.info(`results: ${results}`);
+        results.map(x => client.info(`results: ${x.environmentName} - ${x.serverTaskId}`));
         return results;
     });
 }
