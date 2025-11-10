@@ -75,6 +75,8 @@ export async function createDeploymentFromInputs(
     }
   }
 
+  client.info(`response.DeploymentServerTasks: ${response.DeploymentServerTasks}`)
+
   // if result is empty array, do the stuff in the catch block
   // put massive comment - comapatability issue with the support for multiple id parameters
 
@@ -86,6 +88,8 @@ export async function createDeploymentFromInputs(
       )[0].Name
     }
   })
+
+  client.info(`results: ${results}`)
 
   return results
 }
