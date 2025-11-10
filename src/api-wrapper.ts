@@ -75,11 +75,6 @@ export async function createDeploymentFromInputs(
     }
   }
 
-  response.DeploymentServerTasks.map(x => client.info(`response.DeploymentServerTasks: ${x.ServerTaskId}`))
-
-  // if result is empty array, do the stuff in the catch block
-  // put massive comment - comapatability issue with the support for multiple id parameters
-
   const results = response.DeploymentServerTasks.map(x => {
     return {
       serverTaskId: x.ServerTaskId,
@@ -88,8 +83,6 @@ export async function createDeploymentFromInputs(
       )[0].Name
     }
   })
-
-  results.map(x => client.info(`results: ${x.environmentName} - ${x.serverTaskId}`))
 
   return results
 }
