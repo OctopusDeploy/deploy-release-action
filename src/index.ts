@@ -50,8 +50,6 @@ import { createDeploymentFromInputs } from './api-wrapper'
       )
     }
 
-    client.info(`9`)
-
     const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY
     if (stepSummaryFile && deploymentResults.length > 0) {
       writeFileSync(stepSummaryFile, `🐙 Octopus Deploy queued deployment(s) in Project **${parameters.project}**.`)

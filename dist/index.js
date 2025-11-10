@@ -44813,30 +44813,24 @@ function createDeploymentFromInputs(client, parameters) {
         try {
             environments = yield environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
             if (environments.Items.length === 0) {
-                client.info('1');
                 // Catches cases where the environmentsV2Repository returns an empty array due to a
                 // historical compatibility issue taking multiple ID parameters from the Octopus API client.
-                client.info('No environments returned from v2 environments endpoint. Checking v1 endpoint...');
+                client.info('No environments returned from list environments v2 endpoint. Checking v1 endpoint...');
                 environments = yield getV1EnvironmentsByIds(client, parameters.space, envIds);
-                client.info('2');
             }
         }
         catch (error) {
-            client.info('3');
             // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             if ((error === null || error === void 0 ? void 0 : error.StatusCode) === 404) {
-                client.info('Environments v2 endpoint may be unavailable. Checking v1 endpoint...');
+                client.info('List environments v2 endpoint may be unavailable. Checking v1 endpoint...');
                 environments = yield getV1EnvironmentsByIds(client, parameters.space, envIds);
-                client.info('4');
             }
             else {
-                client.info('5');
                 throw error;
             }
         }
         const results = response.DeploymentServerTasks.map(x => {
-            client.info(`6 ${x.DeploymentId} - ${x.ServerTaskId}`);
             return {
                 serverTaskId: x.ServerTaskId,
                 environmentName: environments.Items.filter(e => e.Id === deployments.Items.filter(d => d.TaskId === x.ServerTaskId)[0].EnvironmentId)[0].Name
@@ -44848,7 +44842,6 @@ function createDeploymentFromInputs(client, parameters) {
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
 function getV1EnvironmentsByIds(client, spaceName, envIds) {
     return __awaiter(this, void 0, void 0, function* () {
-        client.info(`8`);
         const envRepository = new api_client_1.EnvironmentRepository(client, spaceName);
         return yield envRepository.list({ ids: envIds, take: envIds.length });
     });
@@ -44914,7 +44907,6 @@ const api_wrapper_1 = __nccwpck_require__(6049);
                 };
             }));
         }
-        client.info(`9`);
         const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
         if (stepSummaryFile && deploymentResults.length > 0) {
             (0, fs_1.writeFileSync)(stepSummaryFile, `🐙 Octopus Deploy queued deployment(s) in Project **${parameters.project}**.`);
