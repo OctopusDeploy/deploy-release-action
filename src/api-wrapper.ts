@@ -61,21 +61,29 @@ export async function createDeploymentFromInputs(
     environments = await environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
 
     if (environments.Items.length === 0) {
+      client.info('1')
       // Catches cases where the environmentsV2Repository returns an empty array due to a
       // historical compatibility issue taking multiple ID parameters from the Octopus API client.
-      environments = await fallBackToEnvironmentRepository(client, parameters.space, envIds)
+      client.info('No environments returned from v2 environments endpoint. Checking v1 endpoint...')
+      environments = await getV1EnvironmentsByIds(client, parameters.space, envIds)
+      client.info('2')
     }
   } catch (error) {
+    client.info('3')
     // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((error as any)?.response?.status === 404) {
-      environments = await fallBackToEnvironmentRepository(client, parameters.space, envIds)
+    if ((error as any)?.StatusCode === 404) {
+      client.info('Environments v2 endpoint may be unavailable. Checking v1 endpoint...')
+      environments = await getV1EnvironmentsByIds(client, parameters.space, envIds)
+      client.info('4')
     } else {
+      client.info('5')
       throw error
     }
   }
 
   const results = response.DeploymentServerTasks.map(x => {
+    client.info(`6 ${x.DeploymentId} - ${x.ServerTaskId}`)
     return {
       serverTaskId: x.ServerTaskId,
       environmentName: environments.Items.filter(
@@ -87,11 +95,12 @@ export async function createDeploymentFromInputs(
   return results
 }
 
-async function fallBackToEnvironmentRepository(
+async function getV1EnvironmentsByIds(
   client: Client,
   spaceName: string,
   envIds: string[]
-): Promise<ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>> {
+): Promise<ResourceCollection<DeploymentEnvironment>> {
+  client.info(`8`)
   const envRepository = new EnvironmentRepository(client, spaceName)
   return await envRepository.list({ ids: envIds, take: envIds.length })
 }
