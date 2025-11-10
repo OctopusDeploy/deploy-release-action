@@ -59,16 +59,24 @@ export async function createDeploymentFromInputs(
   const environmentsV2Repository = new EnvironmentV2Repository(client, parameters.space) // can dodgey this up!!! Can push this up and test the action :D
   try {
     environments = await environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
+
+    if (environments.Items.length === 0) {
+      // Catches cases where the environmentsV2Repository returns an empty array due to a
+      // historical compatibility issue taking multiple ID parameters from the Octopus API client.
+      environments = await fallBackToEnvironmentRepository(client, parameters.space, envIds)
+    }
   } catch (error) {
     // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any)?.response?.status === 404) {
-      const envRepository = new EnvironmentRepository(client, parameters.space)
-      environments = await envRepository.list({ ids: envIds, take: envIds.length })
+      environments = await fallBackToEnvironmentRepository(client, parameters.space, envIds)
     } else {
       throw error
     }
   }
+
+  // if result is empty array, do the stuff in the catch block
+  // put massive comment - comapatability issue with the support for multiple id parameters
 
   const results = response.DeploymentServerTasks.map(x => {
     return {
@@ -80,4 +88,13 @@ export async function createDeploymentFromInputs(
   })
 
   return results
+}
+
+async function fallBackToEnvironmentRepository(
+  client: Client,
+  spaceName: string,
+  envIds: string[]
+): Promise<ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>> {
+  const envRepository = new EnvironmentRepository(client, spaceName)
+  return await envRepository.list({ ids: envIds, take: envIds.length })
 }

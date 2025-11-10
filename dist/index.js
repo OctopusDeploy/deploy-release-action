@@ -4564,6 +4564,80 @@ exports.EnvironmentRepository = EnvironmentRepository;
 
 /***/ }),
 
+/***/ 6627:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EnvironmentV2Repository = void 0;
+var __1 = __nccwpck_require__(1212);
+var EnvironmentV2Repository = /** @class */ (function () {
+    function EnvironmentV2Repository(client, spaceName) {
+        this.client = client;
+        this.spaceName = spaceName;
+    }
+    EnvironmentV2Repository.prototype.list = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.client.request("".concat(__1.spaceScopedRoutePrefix, "/environments/v2{?ids,partialName,type,skip,take}"), __assign({ spaceName: this.spaceName }, args))];
+            });
+        });
+    };
+    return EnvironmentV2Repository;
+}());
+exports.EnvironmentV2Repository = EnvironmentV2Repository;
+
+
+/***/ }),
+
 /***/ 5870:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -4586,6 +4660,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__nccwpck_require__(7837), exports);
 __exportStar(__nccwpck_require__(1611), exports);
+__exportStar(__nccwpck_require__(6627), exports);
 
 
 /***/ }),
@@ -44708,7 +44783,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createDeploymentFromInputs = void 0;
-const environment_v2_repository_1 = __nccwpck_require__(7988);
 const api_client_1 = __nccwpck_require__(1212);
 function createDeploymentFromInputs(client, parameters) {
     var _a;
@@ -44736,21 +44810,27 @@ function createDeploymentFromInputs(client, parameters) {
         const deployments = yield deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length });
         const envIds = deployments.Items.map(d => d.EnvironmentId);
         let environments;
-        const environmentsV2Repository = new environment_v2_repository_1.EnvironmentV2Repository(client, parameters.space); // can dodgey this up!!! Can push this up and test the action :D
+        const environmentsV2Repository = new api_client_1.EnvironmentV2Repository(client, parameters.space); // can dodgey this up!!! Can push this up and test the action :D
         try {
             environments = yield environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
+            if (environments.Items.length === 0) {
+                // Catches cases where the environmentsV2Repository returns an empty array due to a
+                // historical compatibility issue taking multiple ID parameters from the Octopus API client.
+                environments = yield fallBackToEnvironmentRepository(client, parameters.space, envIds);
+            }
         }
         catch (error) {
             // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             if (((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.status) === 404) {
-                const envRepository = new api_client_1.EnvironmentRepository(client, parameters.space);
-                environments = yield envRepository.list({ ids: envIds, take: envIds.length });
+                environments = yield fallBackToEnvironmentRepository(client, parameters.space, envIds);
             }
             else {
                 throw error;
             }
         }
+        // if result is empty array, do the stuff in the catch block
+        // put massive comment - comapatability issue with the support for multiple id parameters
         const results = response.DeploymentServerTasks.map(x => {
             return {
                 serverTaskId: x.ServerTaskId,
@@ -44761,39 +44841,12 @@ function createDeploymentFromInputs(client, parameters) {
     });
 }
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
-
-
-/***/ }),
-
-/***/ 7988:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+function fallBackToEnvironmentRepository(client, spaceName, envIds) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const envRepository = new api_client_1.EnvironmentRepository(client, spaceName);
+        return yield envRepository.list({ ids: envIds, take: envIds.length });
     });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EnvironmentV2Repository = void 0;
-const api_client_1 = __nccwpck_require__(1212);
-class EnvironmentV2Repository {
-    constructor(client, spaceName) {
-        this.client = client;
-        this.spaceName = spaceName;
-    }
-    list(args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.client.request(`${api_client_1.spaceScopedRoutePrefix}/environments/v2{?ids,partialName,skip,take}`, Object.assign({ spaceName: this.spaceName }, args));
-        });
-    }
 }
-exports.EnvironmentV2Repository = EnvironmentV2Repository;
 
 
 /***/ }),
