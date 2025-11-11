@@ -44809,14 +44809,15 @@ function createDeploymentFromInputs(client, parameters) {
         const deployments = yield deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length });
         const envIds = deployments.Items.map(d => d.EnvironmentId);
         let environments;
-        const environmentsV2Repository = new api_client_1.EnvironmentV2Repository(client, parameters.space); // can dodgey this up!!! Can push this up and test the action :D
+        const environmentV1Repository = new api_client_1.EnvironmentRepository(client, parameters.space);
+        const environmentV2Repository = new api_client_1.EnvironmentV2Repository(client, parameters.space);
         try {
-            environments = yield environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
-            if (environments.Items.length === 0) {
-                // Catches cases where the environmentsV2Repository returns an empty array due to a
+            environments = yield environmentV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
+            if (environments && environments.Items.length === 0) {
+                // Catch cases where the environmentsV2Repository returns an empty array due to a
                 // historical compatibility issue taking multiple ID parameters from the Octopus API client.
                 client.info('No environments returned from list environments v2 endpoint. Checking v1 endpoint...');
-                environments = yield getV1EnvironmentsByIds(client, parameters.space, envIds);
+                environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length });
             }
         }
         catch (error) {
@@ -44824,7 +44825,7 @@ function createDeploymentFromInputs(client, parameters) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             if ((error === null || error === void 0 ? void 0 : error.StatusCode) === 404) {
                 client.info('List environments v2 endpoint may be unavailable. Checking v1 endpoint...');
-                environments = yield getV1EnvironmentsByIds(client, parameters.space, envIds);
+                environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length });
             }
             else {
                 throw error;
@@ -44840,12 +44841,6 @@ function createDeploymentFromInputs(client, parameters) {
     });
 }
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
-function getV1EnvironmentsByIds(client, spaceName, envIds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const envRepository = new api_client_1.EnvironmentRepository(client, spaceName);
-        return yield envRepository.list({ ids: envIds, take: envIds.length });
-    });
-}
 
 
 /***/ }),

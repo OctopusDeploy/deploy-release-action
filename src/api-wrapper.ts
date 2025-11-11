@@ -1,4 +1,3 @@
-// import { EnvironmentV2Repository } from './environment-v2-repository'
 import { InputParameters } from './input-parameters'
 import {
   Client,
@@ -56,22 +55,24 @@ export async function createDeploymentFromInputs(
 
   const envIds = deployments.Items.map(d => d.EnvironmentId)
   let environments: ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>
-  const environmentsV2Repository = new EnvironmentV2Repository(client, parameters.space) // can dodgey this up!!! Can push this up and test the action :D
-  try {
-    environments = await environmentsV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
+  const environmentV1Repository = new EnvironmentRepository(client, parameters.space)
+  const environmentV2Repository = new EnvironmentV2Repository(client, parameters.space)
 
-    if (environments.Items.length === 0) {
-      // Catches cases where the environmentsV2Repository returns an empty array due to a
+  try {
+    environments = await environmentV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
+
+    if (environments && environments.Items.length === 0) {
+      // Catch cases where the environmentsV2Repository returns an empty array due to a
       // historical compatibility issue taking multiple ID parameters from the Octopus API client.
       client.info('No environments returned from list environments v2 endpoint. Checking v1 endpoint...')
-      environments = await getV1EnvironmentsByIds(client, parameters.space, envIds)
+      environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
     }
   } catch (error) {
     // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any)?.StatusCode === 404) {
       client.info('List environments v2 endpoint may be unavailable. Checking v1 endpoint...')
-      environments = await getV1EnvironmentsByIds(client, parameters.space, envIds)
+      environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
     } else {
       throw error
     }
@@ -87,13 +88,4 @@ export async function createDeploymentFromInputs(
   })
 
   return results
-}
-
-async function getV1EnvironmentsByIds(
-  client: Client,
-  spaceName: string,
-  envIds: string[]
-): Promise<ResourceCollection<DeploymentEnvironment>> {
-  const envRepository = new EnvironmentRepository(client, spaceName)
-  return await envRepository.list({ ids: envIds, take: envIds.length })
 }
