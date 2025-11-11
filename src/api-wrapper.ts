@@ -61,7 +61,7 @@ export async function createDeploymentFromInputs(
   try {
     environments = await environmentV2Repository.list({ ids: envIds, skip: 0, take: envIds.length })
   } catch (error) {
-    // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
+    // Catch cases in which GetEnvironmentsRequestV2 capability is toggled off or not available on Octopus Server version.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any)?.StatusCode === 404) {
       client.info('List environments v2 endpoint may be unavailable. Checking v1 endpoint...')
@@ -71,10 +71,10 @@ export async function createDeploymentFromInputs(
     }
   }
 
-  if (environments.Items && environments.Items.length === 0) {
-    // Catch cases where the environmentsV2Repository returns an empty array due to a
-    // historical compatibility issue taking multiple ID parameters from the Octopus API client.
-    client.info('Found no matching environments. Checking v1 endpoint...')
+  if (!environments.Items || (environments.Items && environments.Items.length === 0)) {
+    // Catch cases where the environmentsV2Repository returns an empty response due to a
+    // pre-2025.4 compatibility issue taking multiple ID parameters from the Octopus API client.
+    client.info('Found no matching environments. Rechecking with v1 endpoint...')
     environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
   }
 
