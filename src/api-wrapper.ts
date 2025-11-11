@@ -78,6 +78,12 @@ export async function createDeploymentFromInputs(
     environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
   }
 
+  if (!environments.Items || (environments.Items && environments.Items.length === 0)) {
+    throw new Error(
+      'Could not retrieve environment details. If you are deploying to an ephemeral environment try switching to the latest version of Octopus Server.'
+    )
+  }
+
   const results = response.DeploymentServerTasks.map(x => {
     return {
       serverTaskId: x.ServerTaskId,
