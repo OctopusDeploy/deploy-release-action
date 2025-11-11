@@ -44813,12 +44813,6 @@ function createDeploymentFromInputs(client, parameters) {
         const environmentV2Repository = new api_client_1.EnvironmentV2Repository(client, parameters.space);
         try {
             environments = yield environmentV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });
-            if (environments && environments.Items.length === 0) {
-                // Catch cases where the environmentsV2Repository returns an empty array due to a
-                // historical compatibility issue taking multiple ID parameters from the Octopus API client.
-                client.info('No environments returned from list environments v2 endpoint. Checking v1 endpoint...');
-                environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length });
-            }
         }
         catch (error) {
             // Catch cases in which GetEnvironmentsRequestV2 cabability is toggled off or not available on Octopus Server version.
@@ -44830,6 +44824,12 @@ function createDeploymentFromInputs(client, parameters) {
             else {
                 throw error;
             }
+        }
+        if (environments.Items && environments.Items.length === 0) {
+            // Catch cases where the environmentsV2Repository returns an empty array due to a
+            // historical compatibility issue taking multiple ID parameters from the Octopus API client.
+            client.info('Found no matching environments. Checking v1 endpoint...');
+            environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length });
         }
         const results = response.DeploymentServerTasks.map(x => {
             return {
