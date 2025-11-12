@@ -56,7 +56,7 @@ export async function createDeploymentFromInputs(
   const envIds = deployments.Items.map(d => d.EnvironmentId)
 
   const environments = await listEnvironments(client, envIds, parameters.space)
-  if (!environments?.Items || (environments.Items && environments.Items.length === 0)) {
+  if (!environmentsFound(environments)) {
     throw new Error(
       'Could not retrieve environment details. If you are deploying to an ephemeral environment please ensure you are using Octopus Server version 2025.4+.'
     )
@@ -72,6 +72,10 @@ export async function createDeploymentFromInputs(
   })
 
   return results
+}
+
+function environmentsFound(environments: ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>): boolean {
+  return !!environments?.Items && environments.Items.length > 0
 }
 
 export async function listEnvironments(
@@ -97,11 +101,11 @@ export async function listEnvironments(
     }
   }
 
-  if (!environments?.Items || (environments.Items && environments.Items.length === 0)) {
+  if (!environmentsFound(environments)) {
     // Catch cases where the environmentsV2Repository returns an empty response due to a
     // pre-2025.4 compatibility issue taking multiple ID parameters from the Octopus API client.
     client.debug('Found no matching environments. Rechecking with v1 endpoint...')
-    environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length }) // cc returns undefined but should return test data!
+    environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
   }
 
   return environments

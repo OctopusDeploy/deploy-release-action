@@ -44830,7 +44830,7 @@ function createDeploymentFromInputs(client, parameters) {
         const deployments = yield deploymentRepository.list({ ids: deploymentIds, take: deploymentIds.length });
         const envIds = deployments.Items.map(d => d.EnvironmentId);
         const environments = yield listEnvironments(client, envIds, parameters.space);
-        if (!(environments === null || environments === void 0 ? void 0 : environments.Items) || (environments.Items && environments.Items.length === 0)) {
+        if (!environmentsFound(environments)) {
             throw new Error('Could not retrieve environment details. If you are deploying to an ephemeral environment please ensure you are using Octopus Server version 2025.4+.');
         }
         const results = response.DeploymentServerTasks.map(x => {
@@ -44843,6 +44843,9 @@ function createDeploymentFromInputs(client, parameters) {
     });
 }
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
+function environmentsFound(environments) {
+    return !!(environments === null || environments === void 0 ? void 0 : environments.Items) && environments.Items.length > 0;
+}
 function listEnvironments(client, envIds, spaceName) {
     return __awaiter(this, void 0, void 0, function* () {
         const environmentV1Repository = new api_client_1.EnvironmentRepository(client, spaceName);
@@ -44862,11 +44865,11 @@ function listEnvironments(client, envIds, spaceName) {
                 throw error;
             }
         }
-        if (!(environments === null || environments === void 0 ? void 0 : environments.Items) || (environments.Items && environments.Items.length === 0)) {
+        if (!environmentsFound(environments)) {
             // Catch cases where the environmentsV2Repository returns an empty response due to a
             // pre-2025.4 compatibility issue taking multiple ID parameters from the Octopus API client.
             client.debug('Found no matching environments. Rechecking with v1 endpoint...');
-            environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length }); // cc returns undefined but should return test data!
+            environments = yield environmentV1Repository.list({ ids: envIds, take: envIds.length });
         }
         return environments;
     });
