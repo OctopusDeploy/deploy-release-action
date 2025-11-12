@@ -44843,10 +44843,10 @@ function createDeploymentFromInputs(client, parameters) {
     });
 }
 exports.createDeploymentFromInputs = createDeploymentFromInputs;
-function listEnvironments(client, envIds, spaceId) {
+function listEnvironments(client, envIds, spaceName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const environmentV1Repository = new api_client_1.EnvironmentRepository(client, spaceId);
-        const environmentV2Repository = new api_client_1.EnvironmentV2Repository(client, spaceId);
+        const environmentV1Repository = new api_client_1.EnvironmentRepository(client, spaceName);
+        const environmentV2Repository = new api_client_1.EnvironmentV2Repository(client, spaceName);
         let environments;
         try {
             environments = yield environmentV2Repository.list({ ids: envIds, skip: 0, take: envIds.length });

@@ -77,10 +77,10 @@ export async function createDeploymentFromInputs(
 export async function listEnvironments(
   client: Client,
   envIds: string[],
-  spaceId: string
+  spaceName: string
 ): Promise<ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>> {
-  const environmentV1Repository = new EnvironmentRepository(client, spaceId)
-  const environmentV2Repository = new EnvironmentV2Repository(client, spaceId)
+  const environmentV1Repository = new EnvironmentRepository(client, spaceName)
+  const environmentV2Repository = new EnvironmentV2Repository(client, spaceName)
 
   let environments: ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>
 
