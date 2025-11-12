@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@actions/core": "1.11.1",
-    "@octopusdeploy/api-client": "3.5.2"
+    "@octopusdeploy/api-client": "3.10.2"
   },
   "description": "GitHub Action to Create a Release in Octopus Deploy",
   "devDependencies": {
@@ -24,6 +24,7 @@
     "jest-circus": "29.7.0",
     "jest-junit": "15.0.0",
     "js-yaml": "4.1.0",
+    "msw": "^2.12.1",
     "prettier": "2.8.8",
     "tmp": "0.2.5",
     "ts-jest": "29.4.5",
@@ -47,8 +48,11 @@
     "testRunner": "jest-circus/runner",
     "testTimeout": 10000,
     "transform": {
-      "^.+\\.ts$": "ts-jest"
+      "^.+\\.(ts|js)$": "ts-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/msw/"
+    ],
     "verbose": true
   },
   "jest-junit": {
