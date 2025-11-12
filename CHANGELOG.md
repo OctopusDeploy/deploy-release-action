@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.3...v3.3.0) (2025-11-12)
+
+
+### Features
+
+* Enable deployment to ephemeral environments ([#225](https://github.com/OctopusDeploy/deploy-release-action/issues/225)) ([d999521](https://github.com/OctopusDeploy/deploy-release-action/commit/d999521c230e06bc3796baf22f9dd58eb3c70a14))
+
 ## [3.2.3](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.2...v3.2.3) (2025-03-12)
 
 
