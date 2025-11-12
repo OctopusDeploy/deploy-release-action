@@ -21,18 +21,20 @@ describe('listEnvironments', () => {
   // v2 does exist but returns empty array
 
   const mockClient = {
+    request: jest.fn(),
     debug: jest.fn()
   } as unknown as Client
 
   describe('when v2 endpoint is available', () => {
-    test('should successfully retrieve environments using v2 endpoint', async () => {
+    test('should successfully retrieve environments using v1 endpoint', async () => {
       const envIds = [testData.environmentId1, testData.environmentId2]
 
       const server = setupServer(
         http.get('https://my.octopus.app/api/:spaceId/environments/v2', () => {
-          return HttpResponse.json({ message: 'Not Found' }, { status: 404 })
+          //   return HttpResponse.json({ message: 'Not Found' }, { status: 404 })
+          return HttpResponse.json({ Items: [] }) // cc breakpoint not hit
         }),
-        http.get('https://my.octopus.app/api/:spaceId/environments', () => {
+        http.get('https://my.octopus.app/api/:spaceId/environments/v1', () => {
           return HttpResponse.json({
             Items: [
               {
@@ -44,16 +46,16 @@ describe('listEnvironments', () => {
                 Name: testData.environmentName2
               }
             ]
-          })
+          }) // cc breakpoint not hit
         })
       )
       server.listen()
 
-      const result = await listEnvironments(mockClient, testData.spaceName, envIds)
+      const environments = await listEnvironments(mockClient, envIds, testData.spaceId)
 
-      expect(result.Items).toHaveLength(2)
-      expect(result.Items[0].Name).toBe(testData.environmentName1)
-      expect(result.Items[1].Name).toBe(testData.environmentName2)
+      expect(environments.Items).toHaveLength(2)
+      expect(environments.Items[0].Name).toBe(testData.environmentName1)
+      expect(environments.Items[1].Name).toBe(testData.environmentName2)
 
       server.close()
     })

@@ -55,8 +55,8 @@ export async function createDeploymentFromInputs(
 
   const envIds = deployments.Items.map(d => d.EnvironmentId)
 
-  const environments = await listEnvironments(client, parameters.space, envIds)
-  if (!environments.Items || (environments.Items && environments.Items.length === 0)) {
+  const environments = await listEnvironments(client, envIds, parameters.space)
+  if (!environments?.Items || (environments.Items && environments.Items.length === 0)) {
     throw new Error(
       'Could not retrieve environment details. If you are deploying to an ephemeral environment please ensure you are using Octopus Server version 2025.4+.'
     )
@@ -76,11 +76,11 @@ export async function createDeploymentFromInputs(
 
 export async function listEnvironments(
   client: Client,
-  space: string,
-  envIds: string[]
+  envIds: string[],
+  spaceId: string
 ): Promise<ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>> {
-  const environmentV1Repository = new EnvironmentRepository(client, space)
-  const environmentV2Repository = new EnvironmentV2Repository(client, space)
+  const environmentV1Repository = new EnvironmentRepository(client, spaceId)
+  const environmentV2Repository = new EnvironmentV2Repository(client, spaceId)
 
   let environments: ResourceCollection<DeploymentEnvironmentV2 | DeploymentEnvironment>
 
@@ -97,11 +97,11 @@ export async function listEnvironments(
     }
   }
 
-  if (!environments.Items || (environments.Items && environments.Items.length === 0)) {
+  if (!environments?.Items || (environments.Items && environments.Items.length === 0)) {
     // Catch cases where the environmentsV2Repository returns an empty response due to a
     // pre-2025.4 compatibility issue taking multiple ID parameters from the Octopus API client.
     client.debug('Found no matching environments. Rechecking with v1 endpoint...')
-    environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length })
+    environments = await environmentV1Repository.list({ ids: envIds, take: envIds.length }) // cc returns undefined but should return test data!
   }
 
   return environments
