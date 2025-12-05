@@ -8433,9 +8433,12 @@ exports.ServerTaskWaiter = void 0;
 var serverTasks_1 = __nccwpck_require__(9814);
 var serverTasks_2 = __nccwpck_require__(9814);
 var ServerTaskWaiter = /** @class */ (function () {
-    function ServerTaskWaiter(client, spaceName) {
+    function ServerTaskWaiter(client, spaceName, options) {
+        var _a, _b;
         this.client = client;
         this.spaceName = spaceName;
+        this.maxRetries = (_a = options === null || options === void 0 ? void 0 : options.maxRetries) !== null && _a !== void 0 ? _a : 3;
+        this.retryBackoffMs = (_b = options === null || options === void 0 ? void 0 : options.retryBackoffMs) !== null && _b !== void 0 ? _b : 5000;
     }
     ServerTaskWaiter.prototype.waitForServerTasksToComplete = function (serverTaskIds, statusCheckSleepCycle, timeout, pollingCallback, cancelOnTimeout) {
         if (cancelOnTimeout === void 0) { cancelOnTimeout = false; }
@@ -8467,7 +8470,7 @@ var ServerTaskWaiter = /** @class */ (function () {
     };
     ServerTaskWaiter.prototype.waitForTasks = function (spaceServerTaskRepository, serverTaskRepository, serverTaskIds, statusCheckSleepCycle, timeout, cancelOnTimeout, pollingCallback) {
         return __awaiter(this, void 0, void 0, function () {
-            var sleep, stop, timedOut, t, completedTasks, _loop_1;
+            var sleep, stop, timedOut, t, completedTasks, _loop_1, this_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -8496,7 +8499,7 @@ var ServerTaskWaiter = /** @class */ (function () {
                             var e_1, _b;
                             return __generator(this, function (_c) {
                                 switch (_c.label) {
-                                    case 0: return [4 /*yield*/, spaceServerTaskRepository.getByIds(serverTaskIds)];
+                                    case 0: return [4 /*yield*/, this_1.getTasksWithRetry(spaceServerTaskRepository, serverTaskIds)];
                                     case 1:
                                         tasks = _c.sent();
                                         unknownTaskIds = serverTaskIds.filter(function (id) { return tasks.filter(function (t) { return t.Id === id; }).length == 0; });
@@ -8538,6 +8541,7 @@ var ServerTaskWaiter = /** @class */ (function () {
                                 }
                             });
                         };
+                        this_1 = this;
                         _a.label = 2;
                     case 2:
                         if (!!stop) return [3 /*break*/, 4];
@@ -8606,6 +8610,95 @@ var ServerTaskWaiter = /** @class */ (function () {
                 }
             });
         });
+    };
+    ServerTaskWaiter.prototype.getTasksWithRetry = function (repository, taskIds) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var lastError, _loop_2, this_2, attempt, state_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _loop_2 = function (attempt) {
+                            var _c, error_2, errorMessage, statusCode, isRetryable, backoffDelay_1;
+                            return __generator(this, function (_d) {
+                                switch (_d.label) {
+                                    case 0:
+                                        _d.trys.push([0, 2, , 4]);
+                                        _c = {};
+                                        return [4 /*yield*/, repository.getByIds(taskIds)];
+                                    case 1: return [2 /*return*/, (_c.value = _d.sent(), _c)];
+                                    case 2:
+                                        error_2 = _d.sent();
+                                        lastError = error_2;
+                                        errorMessage = error_2 instanceof Error ? error_2.message : String(error_2);
+                                        statusCode = error_2.StatusCode ||
+                                            (typeof error_2.code === "number" ? error_2.code : null) ||
+                                            ((_a = error_2.response) === null || _a === void 0 ? void 0 : _a.status) ||
+                                            error_2.status;
+                                        isRetryable = this_2.isRetryableError(error_2, statusCode);
+                                        if (!isRetryable)
+                                            throw error_2;
+                                        if (attempt === this_2.maxRetries)
+                                            throw new Error("Failed to connect to Octopus server after ".concat(this_2.maxRetries, " attempts. ") + "Last error: ".concat(errorMessage));
+                                        backoffDelay_1 = this_2.retryBackoffMs * Math.pow(2, attempt);
+                                        this_2.client.warn("HTTP request failed (attempt ".concat(attempt + 1, "/").concat(this_2.maxRetries, "): ").concat(errorMessage).concat(statusCode ? " [".concat(statusCode, "]") : "", ". Retrying in ").concat(backoffDelay_1, "ms..."));
+                                        return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, backoffDelay_1); })];
+                                    case 3:
+                                        _d.sent();
+                                        return [3 /*break*/, 4];
+                                    case 4: return [2 /*return*/];
+                                }
+                            });
+                        };
+                        this_2 = this;
+                        attempt = 0;
+                        _b.label = 1;
+                    case 1:
+                        if (!(attempt <= this.maxRetries)) return [3 /*break*/, 4];
+                        return [5 /*yield**/, _loop_2(attempt)];
+                    case 2:
+                        state_1 = _b.sent();
+                        if (typeof state_1 === "object")
+                            return [2 /*return*/, state_1.value];
+                        _b.label = 3;
+                    case 3:
+                        attempt++;
+                        return [3 /*break*/, 1];
+                    case 4: 
+                    // This should never be reached due to throws above, but TypeScript needs it
+                    throw lastError;
+                }
+            });
+        });
+    };
+    ServerTaskWaiter.prototype.isRetryableError = function (error, statusCode) {
+        if (!error)
+            return false;
+        if (statusCode && [408, 429, 500, 502, 503, 504].includes(statusCode)) {
+            return true;
+        }
+        try {
+            var errorStr_1 = String(error.message || error).toLowerCase();
+            var errorCode_1 = error.code ? String(error.code).toLowerCase() : "";
+            var keywords = [
+                "timeout",
+                "etimedout",
+                "econnreset",
+                "econnrefused",
+                "econnaborted",
+                "enotfound",
+                "eai_again",
+                "epipe",
+                "ehostunreach",
+                "enetunreach",
+                "socket",
+                "network",
+            ];
+            return keywords.some(function (k) { return errorStr_1.includes(k) || errorCode_1.includes(k); });
+        }
+        catch (_a) {
+            return false;
+        }
     };
     return ServerTaskWaiter;
 }());
@@ -8711,31 +8804,37 @@ var SpaceServerTaskRepository = /** @class */ (function () {
     };
     SpaceServerTaskRepository.prototype.getByIds = function (serverTaskIds) {
         return __awaiter(this, void 0, void 0, function () {
-            var batchSize, idArrays, promises, _a, _b, _c, index, ids;
+            var batchSize, idArrays, promises, _a, _b, _c, index, ids, results;
             var e_1, _d;
             return __generator(this, function (_e) {
-                batchSize = 300;
-                idArrays = (0, lodash_1.chunk)(serverTaskIds, batchSize);
-                promises = [];
-                try {
-                    for (_a = __values(idArrays.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
-                        _c = __read(_b.value, 2), index = _c[0], ids = _c[1];
-                        promises.push(this.client.request("".concat(this.baseApiPathTemplate, "{?skip,take,ids,partialName}"), {
-                            spaceName: this.spaceName,
-                            ids: ids,
-                            skip: index * batchSize,
-                            take: batchSize,
-                        }));
-                    }
+                switch (_e.label) {
+                    case 0:
+                        batchSize = 300;
+                        idArrays = (0, lodash_1.chunk)(serverTaskIds, batchSize);
+                        promises = [];
+                        try {
+                            for (_a = __values(idArrays.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                                _c = __read(_b.value, 2), index = _c[0], ids = _c[1];
+                                promises.push(this.client.request("".concat(this.baseApiPathTemplate, "{?skip,take,ids,partialName}"), {
+                                    spaceName: this.spaceName,
+                                    ids: ids,
+                                    skip: index * batchSize,
+                                    take: batchSize,
+                                }));
+                            }
+                        }
+                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                        finally {
+                            try {
+                                if (_b && !_b.done && (_d = _a.return)) _d.call(_a);
+                            }
+                            finally { if (e_1) throw e_1.error; }
+                        }
+                        return [4 /*yield*/, Promise.all(promises)];
+                    case 1:
+                        results = _e.sent();
+                        return [2 /*return*/, (0, lodash_1.flatMap)(results, function (c) { return c.Items; })];
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_b && !_b.done && (_d = _a.return)) _d.call(_a);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                return [2 /*return*/, Promise.allSettled(promises).then(function (result) { return (0, lodash_1.flatMap)(result, function (c) { return (c.status == "fulfilled" ? c.value.Items : []); }); })];
             });
         });
     };
