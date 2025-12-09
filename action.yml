@@ -16,7 +16,7 @@ inputs:
     description: 'A multi-line list of environments to deploy to.'
     required: true
   use_guided_failure:
-    default: false
+    default: "false"
     description: 'Whether to use guided failure mode if errors occur during the deployment.'
   variables:
     description: 'A multi-line list of prompted variable values. Format: name:value'
@@ -32,5 +32,5 @@ outputs:
     description: 'JSON string for an array of objects having a `serverTaskId` and an `environmentName`'
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
