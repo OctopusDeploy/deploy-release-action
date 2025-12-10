@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.3.0...v4.0.0) (2025-12-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Migrate to node 24
+
+### Features
+
+* Migrate to node 24 ([688c77e](https://github.com/OctopusDeploy/deploy-release-action/commit/688c77e8ae9fff642420b98863a76465fab08160))
+
 ## [3.3.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.2.3...v3.3.0) (2025-11-12)
 
 

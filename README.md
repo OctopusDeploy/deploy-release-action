@@ -28,7 +28,7 @@ env:
 steps:
   # ...
   - name: Deploy a release in Octopus Deploy 🐙
-    uses: OctopusDeploy/deploy-release-action@v3
+    uses: OctopusDeploy/deploy-release-action@v4
     env:
       OCTOPUS_API_KEY: ${{ secrets.API_KEY  }}
       OCTOPUS_URL: ${{ secrets.SERVER }}
