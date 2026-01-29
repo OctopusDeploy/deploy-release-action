@@ -28,6 +28,7 @@ env:
 steps:
   # ...
   - name: Deploy a release in Octopus Deploy 🐙
+    id: deploy_a_release_in_octopus_deploy
     uses: OctopusDeploy/deploy-release-action@v4
     env:
       OCTOPUS_API_KEY: ${{ secrets.API_KEY  }}
@@ -42,6 +43,38 @@ steps:
       variables: |
         Foo: Bar
         Fizz: Buzz
+```
+
+Deploy a release created from the [Create a Release](https://github.com/marketplace/actions/create-release-in-octopus-deploy) action
+
+```yml
+env:
+  OCTOPUS_API_KEY: ${{ secrets.API_KEY  }}
+  OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
+  OCTOPUS_SPACE: 'Outer Space'
+steps:
+  # ...
+  - name: Create a release in Octopus Deploy 🐙
+    id: create_a_release_in_octopus_deploy
+    uses: OctopusDeploy/create-release-action@v4
+    with:
+      project: 'MyProject'
+  - name: Deploy a release in Octopus Deploy 🐙
+    id: deploy_a_release_in_octopus_deploy
+    uses: OctopusDeploy/deploy-release-action@v4
+    env:
+      OCTOPUS_API_KEY: ${{ secrets.API_KEY  }}
+      OCTOPUS_URL: ${{ secrets.SERVER }}
+      OCTOPUS_SPACE: 'Outer Space'
+    with:
+      project: 'MyProject'
+      release_number: ${{ steps.create_a_release_in_octopus_deploy.outputs.release_number }}
+      environments: |
+        Dev
+        Test
+      variables: |
+        Foo: Bar
+        Fizz: Buzz  
 ```
 
 ## ✍️ Environment Variables
