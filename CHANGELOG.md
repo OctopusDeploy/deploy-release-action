@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.0.0...v4.1.0) (2026-02-03)
+
+
+### Features
+
+* Add workflow to check for conventional commit format PR title  ([#244](https://github.com/OctopusDeploy/deploy-release-action/issues/244)) ([ffafb83](https://github.com/OctopusDeploy/deploy-release-action/commit/ffafb83a615d98ce73eb1b82578f2aaeb58b487e))
+
 ## [4.0.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v3.3.0...v4.0.0) (2025-12-10)
 
 
