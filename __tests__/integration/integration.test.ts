@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import { createDeploymentFromInputs } from '../../src/api-wrapper'
 // we use the Octopus API client to setup and teardown integration test data, it doesn't form part of create-release-action at this point
 import {
