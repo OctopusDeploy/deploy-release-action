@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.1.0...v4.1.1) (2026-03-25)
+
+
+### Bug Fixes
+
+* **deps:** Update core/actions to v3 ([#282](https://github.com/OctopusDeploy/deploy-release-action/issues/282)) ([d4b876a](https://github.com/OctopusDeploy/deploy-release-action/commit/d4b876a717e9d08c5c0b160feb80f549fb9e0750))
+
 ## [4.1.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.0.0...v4.1.0) (2026-02-27)
 
 
