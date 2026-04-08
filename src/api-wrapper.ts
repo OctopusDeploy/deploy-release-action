@@ -27,7 +27,9 @@ export async function createDeploymentFromInputs(
     ReleaseVersion: parameters.releaseNumber,
     EnvironmentNames: parameters.environments,
     UseGuidedFailure: parameters.useGuidedFailure,
-    Variables: parameters.variables
+    Variables: parameters.variables,
+    RunAt: parameters.runAt,
+    NoRunAfter: parameters.noRunAfter
   }
 
   const deploymentRepository = new DeploymentRepository(client, parameters.space)
