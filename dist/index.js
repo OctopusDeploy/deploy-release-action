@@ -57928,7 +57928,9 @@ function getInputParameters() {
     releaseNumber: getInput("release_number", { required: true }),
     environments: getMultilineInput("environments", { required: true }).map((p) => p.trim()),
     useGuidedFailure: getBooleanInput("use_guided_failure") || void 0,
-    variables: variablesMap
+    variables: variablesMap,
+    runAt: getInput("deploy_at") ? new Date(getInput("deploy_at")) : void 0,
+    noRunAfter: getInput("deploy_at_expiry") ? new Date(getInput("deploy_at_expiry")) : void 0
   };
   const errors = [];
   if (!parameters.server) {
@@ -57945,6 +57947,14 @@ function getInputParameters() {
     errors.push(
       "The Octopus space name is required, please specify explicitly through the 'space' input or set the OCTOPUS_SPACE environment variable."
     );
+  }
+  const deployAt = getInput("deploy_at");
+  if (deployAt && isNaN(new Date(deployAt).getTime())) {
+    errors.push(`deploy_at '${deployAt}' is not a valid ISO 8601 date-time string.`);
+  }
+  const deployAtExpiry = getInput("deploy_at_expiry");
+  if (deployAtExpiry && isNaN(new Date(deployAtExpiry).getTime())) {
+    errors.push(`deploy_at_expiry '${deployAtExpiry}' is not a valid ISO 8601 date-time string.`);
   }
   if (errors.length > 0) {
     throw new Error(errors.join("\n"));
@@ -57966,7 +57976,9 @@ async function createDeploymentFromInputs(client, parameters) {
     ReleaseVersion: parameters.releaseNumber,
     EnvironmentNames: parameters.environments,
     UseGuidedFailure: parameters.useGuidedFailure,
-    Variables: parameters.variables
+    Variables: parameters.variables,
+    RunAt: parameters.runAt,
+    NoRunAfter: parameters.noRunAfter
   };
   const deploymentRepository = new import_api_client.DeploymentRepository(client, parameters.space);
   const response = await deploymentRepository.create(command);
