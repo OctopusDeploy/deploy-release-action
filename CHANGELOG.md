@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.1.1...v4.2.0) (2026-04-09)
+
+
+### Features
+
+* add support for deploy_at and deploy_at_expiry inputs ([#296](https://github.com/OctopusDeploy/deploy-release-action/issues/296)) ([fdadc7d](https://github.com/OctopusDeploy/deploy-release-action/commit/fdadc7d668134acbeaa5cc67ac814d42ea3f0dfb))
+
 ## [4.1.1](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.1.0...v4.1.1) (2026-03-25)
 
 
