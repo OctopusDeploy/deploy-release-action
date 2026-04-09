@@ -20,6 +20,10 @@ inputs:
     description: 'Whether to use guided failure mode if errors occur during the deployment.'
   variables:
     description: 'A multi-line list of prompted variable values. Format: name:value'
+  deploy_at:
+    description: 'Schedule the deployment to run at a specific time. Provide an ISO 8601 date-time string (e.g. 2026-04-01T09:00:00+10:00). Leave blank to deploy immediately.'
+  deploy_at_expiry:
+    description: 'Cancel the deployment if it has not started by this time. Provide an ISO 8601 date-time string. Leave blank for no expiry.'
   server:
     description: 'The instance URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). The instance URL is required, but you may also use the OCTOPUS_URL environment variable.'
   api_key:

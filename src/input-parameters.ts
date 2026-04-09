@@ -25,6 +25,8 @@ export interface InputParameters {
   // Optional
   useGuidedFailure?: boolean
   variables?: PromptedVariableValues
+  runAt?: Date
+  noRunAfter?: Date
 }
 
 export function getInputParameters(): InputParameters {
@@ -47,7 +49,9 @@ export function getInputParameters(): InputParameters {
     releaseNumber: getInput('release_number', { required: true }),
     environments: getMultilineInput('environments', { required: true }).map(p => p.trim()),
     useGuidedFailure: getBooleanInput('use_guided_failure') || undefined,
-    variables: variablesMap
+    variables: variablesMap,
+    runAt: getInput('deploy_at') ? new Date(getInput('deploy_at')) : undefined,
+    noRunAfter: getInput('deploy_at_expiry') ? new Date(getInput('deploy_at_expiry')) : undefined
   }
 
   const errors: string[] = []
@@ -67,6 +71,16 @@ export function getInputParameters(): InputParameters {
     errors.push(
       "The Octopus space name is required, please specify explicitly through the 'space' input or set the OCTOPUS_SPACE environment variable."
     )
+  }
+
+  const deployAt = getInput('deploy_at')
+  if (deployAt && isNaN(new Date(deployAt).getTime())) {
+    errors.push(`deploy_at '${deployAt}' is not a valid ISO 8601 date-time string.`)
+  }
+
+  const deployAtExpiry = getInput('deploy_at_expiry')
+  if (deployAtExpiry && isNaN(new Date(deployAtExpiry).getTime())) {
+    errors.push(`deploy_at_expiry '${deployAtExpiry}' is not a valid ISO 8601 date-time string.`)
   }
 
   if (errors.length > 0) {

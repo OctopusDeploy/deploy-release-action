@@ -18,6 +18,8 @@ import {
   RunCondition,
   RunConditionForAction,
   ServerTask,
+  ServerTaskRepository,
+  SpaceServerTaskRepository,
   StartTrigger,
   ServerTaskWaiter
 } from '@octopusdeploy/api-client'
@@ -181,6 +183,60 @@ describe('integration tests', () => {
         const projectRepository = new ProjectRepository(apiClient, standardInputParameters.space)
         await projectRepository.del(project)
       }
+    }
+  })
+
+  test('can deploy a release with scheduled start time', async () => {
+    const output = new CaptureOutput()
+
+    const logger: Logger = {
+      debug: message => output.debug(message),
+      info: message => output.info(message),
+      warn: message => output.warn(message),
+      error: (message, err) => {
+        if (err !== undefined) {
+          output.error(err.message)
+        } else {
+          output.error(message)
+        }
+      }
+    }
+
+    const config: ClientConfiguration = {
+      userAgentApp: 'Test',
+      instanceURL: apiClientConfig.instanceURL,
+      apiKey: apiClientConfig.apiKey,
+      logging: logger
+    }
+
+    const client = await Client.create(config)
+
+    await createReleaseForTest(client)
+    const runAt = new Date(Date.now() + 5 * 60 * 1000)
+    const noRunAfter = new Date(Date.now() + 10 * 60 * 1000)
+
+    const result = await createDeploymentFromInputs(client, {
+      ...standardInputParameters,
+      releaseNumber: localReleaseNumber,
+      environments: ['Dev'],
+      runAt,
+      noRunAfter
+    })
+
+    expect(result.length).toBe(1)
+    expect(result[0].serverTaskId).toContain('ServerTasks-')
+    expect(output.getAllMessages()).toContain(`[INFO] 🎉 1 Deployment queued successfully!`)
+
+    const spaceTaskRepository = new SpaceServerTaskRepository(client, spaceName)
+    for (const { serverTaskId } of result) {
+      const task = await spaceTaskRepository.getById(serverTaskId)
+      expect(new Date(task.QueueTime!)).toStrictEqual(runAt)
+      expect(new Date(task.QueueTimeExpiry!)).toStrictEqual(noRunAfter)
+    }
+
+    const taskRepository = new ServerTaskRepository(client)
+    for (const { serverTaskId } of result) {
+      await taskRepository.cancel(serverTaskId)
     }
   })
 
