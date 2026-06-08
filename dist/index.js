@@ -18712,7 +18712,7 @@ var require_buildInformationRepository = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.BuildInformationRepository = void 0;
     var overwriteMode_1 = require_overwriteMode();
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var BuildInformationRepository = (
       /** @class */
       function() {
@@ -19424,7 +19424,7 @@ var require_environmentRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.EnvironmentRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var spaceScopedBasicRepository_1 = require_spaceScopedBasicRepository();
     var console_1 = require("console");
     var EnvironmentRepository2 = (
@@ -19664,7 +19664,7 @@ var require_environmentV2Repository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.EnvironmentV2Repository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var EnvironmentV2Repository2 = (
       /** @class */
       function() {
@@ -36323,7 +36323,7 @@ var require_projectGroupRepository = __commonJS({
     }();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProjectGroupRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var spaceScopedBasicRepository_1 = require_spaceScopedBasicRepository();
     var ProjectGroupRepository = (
       /** @class */
@@ -42009,7 +42009,7 @@ var require_feedRepository = __commonJS({
     }();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.FeedRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var spaceScopedBasicRepository_1 = require_spaceScopedBasicRepository();
     var FeedRepository = (
       /** @class */
@@ -45534,7 +45534,7 @@ var require_deploymentProcessRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DeploymentProcessRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var DeploymentProcessRepository = (
       /** @class */
       function() {
@@ -47780,7 +47780,7 @@ var require_deploymentRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DeploymentRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var semver_1 = require_semver2();
     var DeploymentRepository2 = (
       /** @class */
@@ -48059,7 +48059,7 @@ var require_releaseRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ReleaseRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var semver_1 = require_semver2();
     var ReleaseRepository = (
       /** @class */
@@ -49130,7 +49130,7 @@ var require_projectRepository = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProjectRepository = void 0;
     var spaceScopedBasicRepository_1 = require_spaceScopedBasicRepository();
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var ProjectRepository = (
       /** @class */
       function(_super) {
@@ -50117,7 +50117,7 @@ var require_spaceRepository = __commonJS({
     }();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SpaceRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var basicRepository_1 = require_basicRepository();
     var SpaceRepository = (
       /** @class */
@@ -50287,7 +50287,7 @@ var require_tenantRepository = __commonJS({
     }();
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.TenantRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var spaceScopedBasicRepository_1 = require_spaceScopedBasicRepository();
     var TenantRepository = (
       /** @class */
@@ -50572,7 +50572,7 @@ var require_user_get_current = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.userGetCurrent = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     function userGetCurrent(client) {
       return __awaiter2(this, void 0, void 0, function() {
         var user;
@@ -50842,7 +50842,7 @@ var require_observabilityRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ObservabilityRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var ObservabilityRepository = (
       /** @class */
       function() {
@@ -51126,7 +51126,7 @@ var require_kubernetesMonitorRepository = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.KubernetesMonitorRepository = void 0;
-    var __1 = require_dist();
+    var __1 = require_dist2();
     var KubernetesMonitorRepository = (
       /** @class */
       function() {
@@ -52059,6 +52059,456 @@ var require_src = __commonJS({
   }
 });
 
+// node_modules/agent-base/dist/src/promisify.js
+var require_promisify = __commonJS({
+  "node_modules/agent-base/dist/src/promisify.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    function promisify(fn) {
+      return function(req, opts) {
+        return new Promise((resolve, reject) => {
+          fn.call(this, req, opts, (err, rtn) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(rtn);
+            }
+          });
+        });
+      };
+    }
+    exports2.default = promisify;
+  }
+});
+
+// node_modules/agent-base/dist/src/index.js
+var require_src2 = __commonJS({
+  "node_modules/agent-base/dist/src/index.js"(exports2, module2) {
+    "use strict";
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    var events_1 = require("events");
+    var debug_1 = __importDefault(require_src());
+    var promisify_1 = __importDefault(require_promisify());
+    var debug2 = debug_1.default("agent-base");
+    function isAgent(v) {
+      return Boolean(v) && typeof v.addRequest === "function";
+    }
+    function isSecureEndpoint() {
+      const { stack } = new Error();
+      if (typeof stack !== "string")
+        return false;
+      return stack.split("\n").some((l) => l.indexOf("(https.js:") !== -1 || l.indexOf("node:https:") !== -1);
+    }
+    function createAgent(callback, opts) {
+      return new createAgent.Agent(callback, opts);
+    }
+    (function(createAgent2) {
+      class Agent extends events_1.EventEmitter {
+        constructor(callback, _opts) {
+          super();
+          let opts = _opts;
+          if (typeof callback === "function") {
+            this.callback = callback;
+          } else if (callback) {
+            opts = callback;
+          }
+          this.timeout = null;
+          if (opts && typeof opts.timeout === "number") {
+            this.timeout = opts.timeout;
+          }
+          this.maxFreeSockets = 1;
+          this.maxSockets = 1;
+          this.maxTotalSockets = Infinity;
+          this.sockets = {};
+          this.freeSockets = {};
+          this.requests = {};
+          this.options = {};
+        }
+        get defaultPort() {
+          if (typeof this.explicitDefaultPort === "number") {
+            return this.explicitDefaultPort;
+          }
+          return isSecureEndpoint() ? 443 : 80;
+        }
+        set defaultPort(v) {
+          this.explicitDefaultPort = v;
+        }
+        get protocol() {
+          if (typeof this.explicitProtocol === "string") {
+            return this.explicitProtocol;
+          }
+          return isSecureEndpoint() ? "https:" : "http:";
+        }
+        set protocol(v) {
+          this.explicitProtocol = v;
+        }
+        callback(req, opts, fn) {
+          throw new Error('"agent-base" has no default implementation, you must subclass and override `callback()`');
+        }
+        /**
+         * Called by node-core's "_http_client.js" module when creating
+         * a new HTTP request with this Agent instance.
+         *
+         * @api public
+         */
+        addRequest(req, _opts) {
+          const opts = Object.assign({}, _opts);
+          if (typeof opts.secureEndpoint !== "boolean") {
+            opts.secureEndpoint = isSecureEndpoint();
+          }
+          if (opts.host == null) {
+            opts.host = "localhost";
+          }
+          if (opts.port == null) {
+            opts.port = opts.secureEndpoint ? 443 : 80;
+          }
+          if (opts.protocol == null) {
+            opts.protocol = opts.secureEndpoint ? "https:" : "http:";
+          }
+          if (opts.host && opts.path) {
+            delete opts.path;
+          }
+          delete opts.agent;
+          delete opts.hostname;
+          delete opts._defaultAgent;
+          delete opts.defaultPort;
+          delete opts.createConnection;
+          req._last = true;
+          req.shouldKeepAlive = false;
+          let timedOut = false;
+          let timeoutId = null;
+          const timeoutMs = opts.timeout || this.timeout;
+          const onerror = (err) => {
+            if (req._hadError)
+              return;
+            req.emit("error", err);
+            req._hadError = true;
+          };
+          const ontimeout = () => {
+            timeoutId = null;
+            timedOut = true;
+            const err = new Error(`A "socket" was not created for HTTP request before ${timeoutMs}ms`);
+            err.code = "ETIMEOUT";
+            onerror(err);
+          };
+          const callbackError = (err) => {
+            if (timedOut)
+              return;
+            if (timeoutId !== null) {
+              clearTimeout(timeoutId);
+              timeoutId = null;
+            }
+            onerror(err);
+          };
+          const onsocket = (socket) => {
+            if (timedOut)
+              return;
+            if (timeoutId != null) {
+              clearTimeout(timeoutId);
+              timeoutId = null;
+            }
+            if (isAgent(socket)) {
+              debug2("Callback returned another Agent instance %o", socket.constructor.name);
+              socket.addRequest(req, opts);
+              return;
+            }
+            if (socket) {
+              socket.once("free", () => {
+                this.freeSocket(socket, opts);
+              });
+              req.onSocket(socket);
+              return;
+            }
+            const err = new Error(`no Duplex stream was returned to agent-base for \`${req.method} ${req.path}\``);
+            onerror(err);
+          };
+          if (typeof this.callback !== "function") {
+            onerror(new Error("`callback` is not defined"));
+            return;
+          }
+          if (!this.promisifiedCallback) {
+            if (this.callback.length >= 3) {
+              debug2("Converting legacy callback function to promise");
+              this.promisifiedCallback = promisify_1.default(this.callback);
+            } else {
+              this.promisifiedCallback = this.callback;
+            }
+          }
+          if (typeof timeoutMs === "number" && timeoutMs > 0) {
+            timeoutId = setTimeout(ontimeout, timeoutMs);
+          }
+          if ("port" in opts && typeof opts.port !== "number") {
+            opts.port = Number(opts.port);
+          }
+          try {
+            debug2("Resolving socket for %o request: %o", opts.protocol, `${req.method} ${req.path}`);
+            Promise.resolve(this.promisifiedCallback(req, opts)).then(onsocket, callbackError);
+          } catch (err) {
+            Promise.reject(err).catch(callbackError);
+          }
+        }
+        freeSocket(socket, opts) {
+          debug2("Freeing socket %o %o", socket.constructor.name, opts);
+          socket.destroy();
+        }
+        destroy() {
+          debug2("Destroying agent %o", this.constructor.name);
+        }
+      }
+      createAgent2.Agent = Agent;
+      createAgent2.prototype = createAgent2.Agent.prototype;
+    })(createAgent || (createAgent = {}));
+    module2.exports = createAgent;
+  }
+});
+
+// node_modules/https-proxy-agent/dist/parse-proxy-response.js
+var require_parse_proxy_response = __commonJS({
+  "node_modules/https-proxy-agent/dist/parse-proxy-response.js"(exports2) {
+    "use strict";
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    var debug_1 = __importDefault(require_src());
+    var debug2 = debug_1.default("https-proxy-agent:parse-proxy-response");
+    function parseProxyResponse(socket) {
+      return new Promise((resolve, reject) => {
+        let buffersLength = 0;
+        const buffers = [];
+        function read() {
+          const b = socket.read();
+          if (b)
+            ondata(b);
+          else
+            socket.once("readable", read);
+        }
+        function cleanup() {
+          socket.removeListener("end", onend);
+          socket.removeListener("error", onerror);
+          socket.removeListener("close", onclose);
+          socket.removeListener("readable", read);
+        }
+        function onclose(err) {
+          debug2("onclose had error %o", err);
+        }
+        function onend() {
+          debug2("onend");
+        }
+        function onerror(err) {
+          cleanup();
+          debug2("onerror %o", err);
+          reject(err);
+        }
+        function ondata(b) {
+          buffers.push(b);
+          buffersLength += b.length;
+          const buffered = Buffer.concat(buffers, buffersLength);
+          const endOfHeaders = buffered.indexOf("\r\n\r\n");
+          if (endOfHeaders === -1) {
+            debug2("have not received end of HTTP headers yet...");
+            read();
+            return;
+          }
+          const firstLine = buffered.toString("ascii", 0, buffered.indexOf("\r\n"));
+          const statusCode = +firstLine.split(" ")[1];
+          debug2("got proxy server response: %o", firstLine);
+          resolve({
+            statusCode,
+            buffered
+          });
+        }
+        socket.on("error", onerror);
+        socket.on("close", onclose);
+        socket.on("end", onend);
+        read();
+      });
+    }
+    exports2.default = parseProxyResponse;
+  }
+});
+
+// node_modules/https-proxy-agent/dist/agent.js
+var require_agent2 = __commonJS({
+  "node_modules/https-proxy-agent/dist/agent.js"(exports2) {
+    "use strict";
+    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    var net_1 = __importDefault(require("net"));
+    var tls_1 = __importDefault(require("tls"));
+    var url_1 = __importDefault(require("url"));
+    var assert_1 = __importDefault(require("assert"));
+    var debug_1 = __importDefault(require_src());
+    var agent_base_1 = require_src2();
+    var parse_proxy_response_1 = __importDefault(require_parse_proxy_response());
+    var debug2 = debug_1.default("https-proxy-agent:agent");
+    var HttpsProxyAgent = class extends agent_base_1.Agent {
+      constructor(_opts) {
+        let opts;
+        if (typeof _opts === "string") {
+          opts = url_1.default.parse(_opts);
+        } else {
+          opts = _opts;
+        }
+        if (!opts) {
+          throw new Error("an HTTP(S) proxy server `host` and `port` must be specified!");
+        }
+        debug2("creating new HttpsProxyAgent instance: %o", opts);
+        super(opts);
+        const proxy = Object.assign({}, opts);
+        this.secureProxy = opts.secureProxy || isHTTPS(proxy.protocol);
+        proxy.host = proxy.hostname || proxy.host;
+        if (typeof proxy.port === "string") {
+          proxy.port = parseInt(proxy.port, 10);
+        }
+        if (!proxy.port && proxy.host) {
+          proxy.port = this.secureProxy ? 443 : 80;
+        }
+        if (this.secureProxy && !("ALPNProtocols" in proxy)) {
+          proxy.ALPNProtocols = ["http 1.1"];
+        }
+        if (proxy.host && proxy.path) {
+          delete proxy.path;
+          delete proxy.pathname;
+        }
+        this.proxy = proxy;
+      }
+      /**
+       * Called when the node-core HTTP client library is creating a
+       * new HTTP request.
+       *
+       * @api protected
+       */
+      callback(req, opts) {
+        return __awaiter2(this, void 0, void 0, function* () {
+          const { proxy, secureProxy } = this;
+          let socket;
+          if (secureProxy) {
+            debug2("Creating `tls.Socket`: %o", proxy);
+            socket = tls_1.default.connect(proxy);
+          } else {
+            debug2("Creating `net.Socket`: %o", proxy);
+            socket = net_1.default.connect(proxy);
+          }
+          const headers = Object.assign({}, proxy.headers);
+          const hostname = `${opts.host}:${opts.port}`;
+          let payload = `CONNECT ${hostname} HTTP/1.1\r
+`;
+          if (proxy.auth) {
+            headers["Proxy-Authorization"] = `Basic ${Buffer.from(proxy.auth).toString("base64")}`;
+          }
+          let { host, port, secureEndpoint } = opts;
+          if (!isDefaultPort(port, secureEndpoint)) {
+            host += `:${port}`;
+          }
+          headers.Host = host;
+          headers.Connection = "close";
+          for (const name of Object.keys(headers)) {
+            payload += `${name}: ${headers[name]}\r
+`;
+          }
+          const proxyResponsePromise = parse_proxy_response_1.default(socket);
+          socket.write(`${payload}\r
+`);
+          const { statusCode, buffered } = yield proxyResponsePromise;
+          if (statusCode === 200) {
+            req.once("socket", resume);
+            if (opts.secureEndpoint) {
+              debug2("Upgrading socket connection to TLS");
+              const servername = opts.servername || opts.host;
+              return tls_1.default.connect(Object.assign(Object.assign({}, omit(opts, "host", "hostname", "path", "port")), {
+                socket,
+                servername
+              }));
+            }
+            return socket;
+          }
+          socket.destroy();
+          const fakeSocket = new net_1.default.Socket({ writable: false });
+          fakeSocket.readable = true;
+          req.once("socket", (s) => {
+            debug2("replaying proxy buffer for failed request");
+            assert_1.default(s.listenerCount("data") > 0);
+            s.push(buffered);
+            s.push(null);
+          });
+          return fakeSocket;
+        });
+      }
+    };
+    exports2.default = HttpsProxyAgent;
+    function resume(socket) {
+      socket.resume();
+    }
+    function isDefaultPort(port, secure) {
+      return Boolean(!secure && port === 80 || secure && port === 443);
+    }
+    function isHTTPS(protocol) {
+      return typeof protocol === "string" ? /^https:?$/i.test(protocol) : false;
+    }
+    function omit(obj, ...keys) {
+      const ret = {};
+      let key;
+      for (key in obj) {
+        if (!keys.includes(key)) {
+          ret[key] = obj[key];
+        }
+      }
+      return ret;
+    }
+  }
+});
+
+// node_modules/https-proxy-agent/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/https-proxy-agent/dist/index.js"(exports2, module2) {
+    "use strict";
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    var agent_1 = __importDefault(require_agent2());
+    function createHttpsProxyAgent(opts) {
+      return new agent_1.default(opts);
+    }
+    (function(createHttpsProxyAgent2) {
+      createHttpsProxyAgent2.HttpsProxyAgent = agent_1.default;
+      createHttpsProxyAgent2.prototype = agent_1.default.prototype;
+    })(createHttpsProxyAgent || (createHttpsProxyAgent = {}));
+    module2.exports = createHttpsProxyAgent;
+  }
+});
+
 // node_modules/follow-redirects/debug.js
 var require_debug2 = __commonJS({
   "node_modules/follow-redirects/debug.js"(exports2, module2) {
@@ -52597,6 +53047,7 @@ var require_axios = __commonJS({
     var FormData$1 = require_form_data();
     var crypto2 = require("crypto");
     var url = require("url");
+    var HttpsProxyAgent = require_dist();
     var http = require("http");
     var https = require("https");
     var http2 = require("http2");
@@ -52761,7 +53212,7 @@ var require_axios = __commonJS({
         if (key === "__proto__" || key === "constructor" || key === "prototype") {
           return;
         }
-        const targetKey = caseless && findKey(result, key) || key;
+        const targetKey = caseless && typeof key === "string" && findKey(result, key) || key;
         const existing = hasOwnProperty(result, targetKey) ? result[targetKey] : void 0;
         if (isPlainObject(existing) && isPlainObject(val)) {
           result[targetKey] = merge(existing, val);
@@ -52774,7 +53225,21 @@ var require_axios = __commonJS({
         }
       };
       for (let i = 0, l = objs.length; i < l; i++) {
-        objs[i] && forEach(objs[i], assignValue);
+        const source = objs[i];
+        if (!source || isBuffer(source)) {
+          continue;
+        }
+        forEach(source, assignValue);
+        if (typeof source !== "object" || isArray(source)) {
+          continue;
+        }
+        const symbols = Object.getOwnPropertySymbols(source);
+        for (let j = 0; j < symbols.length; j++) {
+          const symbol = symbols[j];
+          if (propertyIsEnumerable.call(source, symbol)) {
+            assignValue(source[symbol], symbol);
+          }
+        }
       }
       return result;
     }
@@ -52899,6 +53364,9 @@ var require_axios = __commonJS({
     var hasOwnProperty = (({
       hasOwnProperty: hasOwnProperty2
     }) => (obj, prop) => hasOwnProperty2.call(obj, prop))(Object.prototype);
+    var {
+      propertyIsEnumerable
+    } = Object.prototype;
     var isRegExp = kindOfTest("RegExp");
     var reduceDescriptors = (obj, reducer) => {
       const descriptors = Object.getOwnPropertyDescriptors(obj);
@@ -52949,29 +53417,29 @@ var require_axios = __commonJS({
       return !!(thing && isFunction$1(thing.append) && thing[toStringTag] === "FormData" && thing[iterator]);
     }
     var toJSONObject = (obj) => {
-      const stack = new Array(10);
-      const visit = (source, i) => {
+      const visited = /* @__PURE__ */ new WeakSet();
+      const visit = (source) => {
         if (isObject(source)) {
-          if (stack.indexOf(source) >= 0) {
+          if (visited.has(source)) {
             return;
           }
           if (isBuffer(source)) {
             return source;
           }
           if (!("toJSON" in source)) {
-            stack[i] = source;
+            visited.add(source);
             const target = isArray(source) ? [] : {};
             forEach(source, (value, key) => {
-              const reducedValue = visit(value, i + 1);
+              const reducedValue = visit(value);
               !isUndefined(reducedValue) && (target[key] = reducedValue);
             });
-            stack[i] = void 0;
+            visited.delete(source);
             return target;
           }
         }
         return source;
       };
-      return visit(obj, 0);
+      return visit(obj);
     };
     var isAsyncFn = kindOfTest("AsyncFunction");
     var isThenable = (thing) => thing && (isObject(thing) || isFunction$1(thing)) && isFunction$1(thing.then) && isFunction$1(thing.catch);
@@ -53083,8 +53551,6 @@ var require_axios = __commonJS({
       });
       return parsed;
     };
-    var $internals = Symbol("internals");
-    var INVALID_HEADER_VALUE_CHARS_RE = /[^\x09\x20-\x7E\x80-\xFF]/g;
     function trimSPorHTAB(str) {
       let start = 0;
       let end = str.length;
@@ -53104,11 +53570,26 @@ var require_axios = __commonJS({
       }
       return start === 0 && end === str.length ? str : str.slice(start, end);
     }
+    var INVALID_UNICODE_HEADER_VALUE_CHARS = new RegExp("[\\u0000-\\u0008\\u000a-\\u001f\\u007f]+", "g");
+    var INVALID_BYTE_STRING_HEADER_VALUE_CHARS = new RegExp("[^\\u0009\\u0020-\\u007e\\u0080-\\u00ff]+", "g");
+    function sanitizeValue(value, invalidChars) {
+      if (utils$1.isArray(value)) {
+        return value.map((item) => sanitizeValue(item, invalidChars));
+      }
+      return trimSPorHTAB(String(value).replace(invalidChars, ""));
+    }
+    var sanitizeHeaderValue = (value) => sanitizeValue(value, INVALID_UNICODE_HEADER_VALUE_CHARS);
+    var sanitizeByteStringHeaderValue = (value) => sanitizeValue(value, INVALID_BYTE_STRING_HEADER_VALUE_CHARS);
+    function toByteStringHeaderObject(headers) {
+      const byteStringHeaders = /* @__PURE__ */ Object.create(null);
+      utils$1.forEach(headers.toJSON(), (value, header) => {
+        byteStringHeaders[header] = sanitizeByteStringHeaderValue(value);
+      });
+      return byteStringHeaders;
+    }
+    var $internals = Symbol("internals");
     function normalizeHeader(header) {
       return header && String(header).trim().toLowerCase();
-    }
-    function sanitizeHeaderValue(str) {
-      return trimSPorHTAB(str.replace(INVALID_HEADER_VALUE_CHARS_RE, ""));
     }
     function normalizeValue(value) {
       if (value === false || value == null) {
@@ -53169,7 +53650,7 @@ var require_axios = __commonJS({
         function setHeader(_value, _header, _rewrite) {
           const lHeader = normalizeHeader(_header);
           if (!lHeader) {
-            throw new Error("header name must be a non-empty string");
+            return;
           }
           const key = utils$1.findKey(self2, lHeader);
           if (!key || self2[key] === void 0 || _rewrite === true || _rewrite === void 0 && self2[key] !== false) {
@@ -53185,7 +53666,7 @@ var require_axios = __commonJS({
           let obj = {}, dest, key;
           for (const entry of header) {
             if (!utils$1.isArray(entry)) {
-              throw TypeError("Object iterator must return a key-value pair");
+              throw new TypeError("Object iterator must return a key-value pair");
             }
             obj[key = entry[0]] = (dest = obj[key]) ? utils$1.isArray(dest) ? [...dest, entry[1]] : [dest, entry[1]] : entry[1];
           }
@@ -53566,7 +54047,7 @@ var require_axios = __commonJS({
           throw new AxiosError("Object is too deeply nested (" + depth + " levels). Max depth: " + maxDepth, AxiosError.ERR_FORM_DATA_DEPTH_EXCEEDED);
         }
         if (stack.indexOf(value) !== -1) {
-          throw Error("Circular reference detected in " + path2.join("."));
+          throw new Error("Circular reference detected in " + path2.join("."));
         }
         stack.push(value);
         utils$1.forEach(value, function each(el, key) {
@@ -53705,7 +54186,8 @@ var require_axios = __commonJS({
       silentJSONParsing: true,
       forcedJSONParsing: true,
       clarifyTimeoutError: false,
-      legacyInterceptorReqResOrdering: true
+      legacyInterceptorReqResOrdering: true,
+      advertiseZstdAcceptEncoding: false
     };
     var URLSearchParams2 = url.URLSearchParams;
     var ALPHA = "abcdefghijklmnopqrstuvwxyz";
@@ -53802,7 +54284,7 @@ var require_axios = __commonJS({
           }
           return !isNumericKey;
         }
-        if (!target[name] || !utils$1.isObject(target[name])) {
+        if (!utils$1.hasOwnProp(target, name) || !utils$1.isObject(target[name])) {
           target[name] = [];
         }
         const result = buildPath(path2, value, target[name], index);
@@ -54047,12 +54529,12 @@ var require_axios = __commonJS({
     function getEnv(key) {
       return process.env[key.toLowerCase()] || process.env[key.toUpperCase()] || "";
     }
-    var VERSION = "1.16.0";
+    var VERSION = "1.17.0";
     function parseProtocol(url2) {
       const match = /^([-+\w]{1,25}):(?:\/\/)?/.exec(url2);
       return match && match[1] || "";
     }
-    var DATA_URL_PATTERN = /^(?:([^;]+);)?(?:[^;]+;)?(base64|),([\s\S]*)$/;
+    var DATA_URL_PATTERN = /^([^,;]+\/[^,;]+)?((?:;[^,;=]+=[^,;]+)*)(;base64)?,([\s\S]*)$/;
     function fromDataURI(uri, asBlob, options) {
       const _Blob = options && options.Blob || platform2.classes.Blob;
       const protocol = parseProtocol(uri);
@@ -54065,10 +54547,17 @@ var require_axios = __commonJS({
         if (!match) {
           throw new AxiosError("Invalid URL", AxiosError.ERR_INVALID_URL);
         }
-        const mime = match[1];
-        const isBase64 = match[2];
-        const body = match[3];
-        const buffer = Buffer.from(decodeURIComponent(body), isBase64 ? "base64" : "utf8");
+        const type = match[1];
+        const params = match[2];
+        const encoding = match[3] ? "base64" : "utf8";
+        const body = match[4];
+        let mime;
+        if (type) {
+          mime = params ? type + params : type;
+        } else if (params) {
+          mime = "text/plain" + params;
+        }
+        const buffer = Buffer.from(decodeURIComponent(body), encoding);
         if (asBlob) {
           if (!_Blob) {
             throw new AxiosError("Blob is not supported", AxiosError.ERR_NOT_SUPPORT);
@@ -54257,10 +54746,10 @@ var require_axios = __commonJS({
         boundary = tag + "-" + platform2.generateString(size, BOUNDARY_ALPHABET)
       } = options || {};
       if (!utils$1.isFormData(form)) {
-        throw TypeError("FormData instance required");
+        throw new TypeError("FormData instance required");
       }
       if (boundary.length < 1 || boundary.length > 70) {
-        throw Error("boundary must be 1-70 characters long");
+        throw new Error("boundary must be 1-70 characters long");
       }
       const boundaryBytes = textEncoder.encode("--" + boundary + CRLF);
       const footerBytes = textEncoder.encode("--" + boundary + "--" + CRLF);
@@ -54303,6 +54792,81 @@ var require_axios = __commonJS({
           }
         }
         this.__transform(chunk, encoding, callback);
+      }
+    };
+    var Http2Sessions = class {
+      constructor() {
+        this.sessions = /* @__PURE__ */ Object.create(null);
+      }
+      getSession(authority, options) {
+        options = Object.assign({
+          sessionTimeout: 1e3
+        }, options);
+        let authoritySessions = this.sessions[authority];
+        if (authoritySessions) {
+          let len = authoritySessions.length;
+          for (let i = 0; i < len; i++) {
+            const [sessionHandle, sessionOptions] = authoritySessions[i];
+            if (!sessionHandle.destroyed && !sessionHandle.closed && util.isDeepStrictEqual(sessionOptions, options)) {
+              return sessionHandle;
+            }
+          }
+        }
+        const session = http2.connect(authority, options);
+        let removed;
+        let timer;
+        const removeSession = () => {
+          if (removed) {
+            return;
+          }
+          removed = true;
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+          let entries = authoritySessions, len = entries.length, i = len;
+          while (i--) {
+            if (entries[i][0] === session) {
+              if (len === 1) {
+                delete this.sessions[authority];
+              } else {
+                entries.splice(i, 1);
+              }
+              if (!session.closed) {
+                session.close();
+              }
+              return;
+            }
+          }
+        };
+        const originalRequestFn = session.request;
+        const {
+          sessionTimeout
+        } = options;
+        if (sessionTimeout != null) {
+          let streamsCount = 0;
+          session.request = function() {
+            const stream2 = originalRequestFn.apply(this, arguments);
+            streamsCount++;
+            if (timer) {
+              clearTimeout(timer);
+              timer = null;
+            }
+            stream2.once("close", () => {
+              if (!--streamsCount) {
+                timer = setTimeout(() => {
+                  timer = null;
+                  removeSession();
+                }, sessionTimeout);
+              }
+            });
+            return stream2;
+          };
+        }
+        session.once("close", removeSession);
+        let entry = [session, options];
+        authoritySessions ? authoritySessions.push(entry) : authoritySessions = this.sessions[authority] = [entry];
+        return session;
       }
     };
     var callbackify = (fn, reducer) => {
@@ -54506,6 +55070,9 @@ var require_axios = __commonJS({
       let bytesNotified = 0;
       const _speedometer = speedometer(50, 250);
       return throttle((e) => {
+        if (!e || typeof e.loaded !== "number") {
+          return;
+        }
         const rawLoaded = e.loaded;
         const total = e.lengthComputable ? e.total : void 0;
         const loaded = total != null ? Math.min(rawLoaded, total) : rawLoaded;
@@ -54614,7 +55181,14 @@ var require_axios = __commonJS({
       flush: zlib.constants.BROTLI_OPERATION_FLUSH,
       finishFlush: zlib.constants.BROTLI_OPERATION_FLUSH
     };
+    var zstdOptions = {
+      flush: zlib.constants.ZSTD_e_flush,
+      finishFlush: zlib.constants.ZSTD_e_flush
+    };
     var isBrotliSupported = utils$1.isFunction(zlib.createBrotliDecompress);
+    var isZstdSupported = utils$1.isFunction(zlib.createZstdDecompress);
+    var ACCEPT_ENCODING = "gzip, compress, deflate" + (isBrotliSupported ? ", br" : "");
+    var ACCEPT_ENCODING_WITH_ZSTD = ACCEPT_ENCODING + (isZstdSupported ? ", zstd" : "");
     var {
       http: httpFollow,
       https: httpsFollow
@@ -54634,10 +55208,39 @@ var require_axios = __commonJS({
     }
     var kAxiosSocketListener = Symbol("axios.http.socketListener");
     var kAxiosCurrentReq = Symbol("axios.http.currentReq");
+    var kAxiosInstalledTunnel = Symbol("axios.http.installedTunnel");
+    var tunnelingAgentCache = /* @__PURE__ */ new Map();
+    var tunnelingAgentCacheUser = /* @__PURE__ */ new WeakMap();
+    function getTunnelingAgent(agentOptions, userHttpsAgent) {
+      const key = agentOptions.protocol + "//" + agentOptions.hostname + ":" + (agentOptions.port || "") + "#" + (agentOptions.auth || "");
+      const cache = userHttpsAgent ? tunnelingAgentCacheUser.get(userHttpsAgent) || tunnelingAgentCacheUser.set(userHttpsAgent, /* @__PURE__ */ new Map()).get(userHttpsAgent) : tunnelingAgentCache;
+      let agent = cache.get(key);
+      if (agent) return agent;
+      const merged = userHttpsAgent && userHttpsAgent.options ? {
+        ...userHttpsAgent.options,
+        ...agentOptions
+      } : agentOptions;
+      agent = new HttpsProxyAgent(merged);
+      if (userHttpsAgent && userHttpsAgent.options) {
+        const originTLSOptions = {
+          ...userHttpsAgent.options
+        };
+        const callback = agent.callback;
+        agent.callback = function axiosTunnelingAgentCallback(req, opts) {
+          return callback.call(this, req, {
+            ...originTLSOptions,
+            ...opts
+          });
+        };
+      }
+      agent[kAxiosInstalledTunnel] = true;
+      cache.set(key, agent);
+      return agent;
+    }
     var supportedProtocols = platform2.protocols.map((protocol) => {
       return protocol + ":";
     });
-    var decodeURIComponentSafe = (value) => {
+    var decodeURIComponentSafe$1 = (value) => {
       if (!utils$1.isString(value)) {
         return value;
       }
@@ -54651,87 +55254,19 @@ var require_axios = __commonJS({
       stream2.on("end", flush).on("error", flush);
       return throttled;
     };
-    var Http2Sessions = class {
-      constructor() {
-        this.sessions = /* @__PURE__ */ Object.create(null);
-      }
-      getSession(authority, options) {
-        options = Object.assign({
-          sessionTimeout: 1e3
-        }, options);
-        let authoritySessions = this.sessions[authority];
-        if (authoritySessions) {
-          let len = authoritySessions.length;
-          for (let i = 0; i < len; i++) {
-            const [sessionHandle, sessionOptions] = authoritySessions[i];
-            if (!sessionHandle.destroyed && !sessionHandle.closed && util.isDeepStrictEqual(sessionOptions, options)) {
-              return sessionHandle;
-            }
-          }
-        }
-        const session = http2.connect(authority, options);
-        let removed;
-        const removeSession = () => {
-          if (removed) {
-            return;
-          }
-          removed = true;
-          let entries = authoritySessions, len = entries.length, i = len;
-          while (i--) {
-            if (entries[i][0] === session) {
-              if (len === 1) {
-                delete this.sessions[authority];
-              } else {
-                entries.splice(i, 1);
-              }
-              if (!session.closed) {
-                session.close();
-              }
-              return;
-            }
-          }
-        };
-        const originalRequestFn = session.request;
-        const {
-          sessionTimeout
-        } = options;
-        if (sessionTimeout != null) {
-          let timer;
-          let streamsCount = 0;
-          session.request = function() {
-            const stream2 = originalRequestFn.apply(this, arguments);
-            streamsCount++;
-            if (timer) {
-              clearTimeout(timer);
-              timer = null;
-            }
-            stream2.once("close", () => {
-              if (!--streamsCount) {
-                timer = setTimeout(() => {
-                  timer = null;
-                  removeSession();
-                }, sessionTimeout);
-              }
-            });
-            return stream2;
-          };
-        }
-        session.once("close", removeSession);
-        let entry = [session, options];
-        authoritySessions ? authoritySessions.push(entry) : authoritySessions = this.sessions[authority] = [entry];
-        return session;
-      }
-    };
     var http2Sessions = new Http2Sessions();
     function dispatchBeforeRedirect(options, responseDetails, requestDetails) {
       if (options.beforeRedirects.proxy) {
         options.beforeRedirects.proxy(options);
       }
+      if (options.beforeRedirects.auth) {
+        options.beforeRedirects.auth(options);
+      }
       if (options.beforeRedirects.config) {
         options.beforeRedirects.config(options, responseDetails, requestDetails);
       }
     }
-    function setProxy(options, configProxy, location2, isRedirect) {
+    function setProxy(options, configProxy, location2, isRedirect, configHttpsAgent) {
       let proxy = configProxy;
       if (!proxy && proxy !== false) {
         const proxyUrl = getProxyForUrl(location2);
@@ -54747,6 +55282,9 @@ var require_axios = __commonJS({
             delete options.headers[name];
           }
         }
+      }
+      if (isRedirect && options.agent && options.agent[kAxiosInstalledTunnel]) {
+        options.agent = void 0;
       }
       if (proxy) {
         const isProxyURL = proxy instanceof URL;
@@ -54769,31 +55307,59 @@ var require_axios = __commonJS({
               proxy
             });
           }
-          const base64 = Buffer.from(proxyAuth, "utf8").toString("base64");
-          options.headers["Proxy-Authorization"] = "Basic " + base64;
         }
-        let hasUserHostHeader = false;
-        for (const name of Object.keys(options.headers)) {
-          if (name.toLowerCase() === "host") {
-            hasUserHostHeader = true;
-            break;
+        const targetIsHttps = isHttps.test(options.protocol);
+        if (targetIsHttps) {
+          if (!(configHttpsAgent instanceof HttpsProxyAgent)) {
+            const proxyHost = readProxyField("hostname") || readProxyField("host");
+            const proxyPort = readProxyField("port");
+            const rawProxyProtocol = readProxyField("protocol");
+            const normalizedProtocol = rawProxyProtocol ? rawProxyProtocol.includes(":") ? rawProxyProtocol : `${rawProxyProtocol}:` : "http:";
+            const proxyHostForURL = proxyHost && proxyHost.includes(":") && !proxyHost.startsWith("[") ? `[${proxyHost}]` : proxyHost;
+            const proxyURL = new URL(`${normalizedProtocol}//${proxyHostForURL}${proxyPort ? ":" + proxyPort : ""}`);
+            const agentOptions = {
+              protocol: proxyURL.protocol,
+              hostname: proxyURL.hostname.replace(/^\[|\]$/g, ""),
+              port: proxyURL.port,
+              auth: proxyAuth && typeof proxyAuth === "string" ? proxyAuth : void 0
+            };
+            if (proxyURL.protocol === "https:") {
+              agentOptions.ALPNProtocols = ["http/1.1"];
+            }
+            const tunnelingAgent = getTunnelingAgent(agentOptions, configHttpsAgent);
+            options.agent = tunnelingAgent;
+            if (options.agents) {
+              options.agents.https = tunnelingAgent;
+            }
           }
-        }
-        if (!hasUserHostHeader) {
-          options.headers.host = options.hostname + (options.port ? ":" + options.port : "");
-        }
-        const proxyHost = readProxyField("hostname") || readProxyField("host");
-        options.hostname = proxyHost;
-        options.host = proxyHost;
-        options.port = readProxyField("port");
-        options.path = location2;
-        const proxyProtocol = readProxyField("protocol");
-        if (proxyProtocol) {
-          options.protocol = proxyProtocol.includes(":") ? proxyProtocol : `${proxyProtocol}:`;
+        } else {
+          if (proxyAuth) {
+            const base64 = Buffer.from(proxyAuth, "utf8").toString("base64");
+            options.headers["Proxy-Authorization"] = "Basic " + base64;
+          }
+          let hasUserHostHeader = false;
+          for (const name of Object.keys(options.headers)) {
+            if (name.toLowerCase() === "host") {
+              hasUserHostHeader = true;
+              break;
+            }
+          }
+          if (!hasUserHostHeader) {
+            options.headers.host = options.hostname + (options.port ? ":" + options.port : "");
+          }
+          const proxyHost = readProxyField("hostname") || readProxyField("host");
+          options.hostname = proxyHost;
+          options.host = proxyHost;
+          options.port = readProxyField("port");
+          options.path = location2;
+          const proxyProtocol = readProxyField("protocol");
+          if (proxyProtocol) {
+            options.protocol = proxyProtocol.includes(":") ? proxyProtocol : `${proxyProtocol}:`;
+          }
         }
       }
       options.beforeRedirects.proxy = function beforeRedirect(redirectOptions) {
-        setProxy(redirectOptions, configProxy, redirectOptions.href, true);
+        setProxy(redirectOptions, configProxy, redirectOptions.href, true, configHttpsAgent);
       };
     }
     var isHttpAdapterSupported = typeof process !== "undefined" && utils$1.kindOf(process) === "process";
@@ -54871,6 +55437,7 @@ var require_axios = __commonJS({
     var httpAdapter = isHttpAdapterSupported && function httpAdapter2(config) {
       return wrapAsync(async function dispatchHttpRequest(resolve, reject, onDone) {
         const own2 = (key) => utils$1.hasOwnProp(config, key) ? config[key] : void 0;
+        const transitional = own2("transitional") || transitionalDefaults;
         let data = own2("data");
         let lookup = own2("lookup");
         let family = own2("family");
@@ -54909,7 +55476,6 @@ var require_axios = __commonJS({
           try {
             abortEmitter.emit("abort", !reason || reason.type ? new CanceledError(null, config, req) : reason);
           } catch (err) {
-            console.warn("emit error", err);
           }
         }
         function clearConnectPhaseTimer() {
@@ -54920,7 +55486,6 @@ var require_axios = __commonJS({
         }
         function createTimeoutError() {
           let timeoutErrorMessage = config.timeout ? "timeout of " + config.timeout + "ms exceeded" : "timeout exceeded";
-          const transitional = config.transitional || transitionalDefaults;
           if (config.timeoutErrorMessage) {
             timeoutErrorMessage = config.timeoutErrorMessage;
           }
@@ -55078,9 +55643,9 @@ var require_axios = __commonJS({
           const password = configAuth.password || "";
           auth = username + ":" + password;
         }
-        if (!auth && parsed.username) {
-          const urlUsername = decodeURIComponentSafe(parsed.username);
-          const urlPassword = decodeURIComponentSafe(parsed.password);
+        if (!auth && (parsed.username || parsed.password)) {
+          const urlUsername = decodeURIComponentSafe$1(parsed.username);
+          const urlPassword = decodeURIComponentSafe$1(parsed.password);
           auth = urlUsername + ":" + urlPassword;
         }
         auth && headers.delete("authorization");
@@ -55094,11 +55659,11 @@ var require_axios = __commonJS({
           customErr.exists = true;
           return reject(customErr);
         }
-        headers.set("Accept-Encoding", "gzip, compress, deflate" + (isBrotliSupported ? ", br" : ""), false);
+        headers.set("Accept-Encoding", utils$1.hasOwnProp(transitional, "advertiseZstdAcceptEncoding") && transitional.advertiseZstdAcceptEncoding === true ? ACCEPT_ENCODING_WITH_ZSTD : ACCEPT_ENCODING, false);
         const options = Object.assign(/* @__PURE__ */ Object.create(null), {
           path: path$1,
           method,
-          headers: headers.toJSON(),
+          headers: toByteStringHeaderObject(headers),
           agents: {
             http: config.httpAgent,
             https: config.httpsAgent
@@ -55111,28 +55676,32 @@ var require_axios = __commonJS({
           http2Options
         });
         !utils$1.isUndefined(lookup) && (options.lookup = lookup);
-        if (config.socketPath) {
-          if (typeof config.socketPath !== "string") {
+        const socketPath = own2("socketPath");
+        if (socketPath) {
+          if (typeof socketPath !== "string") {
             return reject(new AxiosError("socketPath must be a string", AxiosError.ERR_BAD_OPTION_VALUE, config));
           }
-          if (config.allowedSocketPaths != null) {
-            const allowed = Array.isArray(config.allowedSocketPaths) ? config.allowedSocketPaths : [config.allowedSocketPaths];
-            const resolvedSocket = path.resolve(config.socketPath);
+          const allowedSocketPaths = own2("allowedSocketPaths");
+          if (allowedSocketPaths != null) {
+            const allowed = Array.isArray(allowedSocketPaths) ? allowedSocketPaths : [allowedSocketPaths];
+            const resolvedSocket = path.resolve(socketPath);
             const isAllowed = allowed.some((entry) => typeof entry === "string" && path.resolve(entry) === resolvedSocket);
             if (!isAllowed) {
-              return reject(new AxiosError(`socketPath "${config.socketPath}" is not permitted by allowedSocketPaths`, AxiosError.ERR_BAD_OPTION_VALUE, config));
+              return reject(new AxiosError(`socketPath "${socketPath}" is not permitted by allowedSocketPaths`, AxiosError.ERR_BAD_OPTION_VALUE, config));
             }
           }
-          options.socketPath = config.socketPath;
+          options.socketPath = socketPath;
         } else {
           options.hostname = parsed.hostname.startsWith("[") ? parsed.hostname.slice(1, -1) : parsed.hostname;
           options.port = parsed.port;
-          setProxy(options, config.proxy, protocol + "//" + parsed.hostname + (parsed.port ? ":" + parsed.port : "") + options.path);
+          setProxy(options, config.proxy, protocol + "//" + parsed.hostname + (parsed.port ? ":" + parsed.port : "") + options.path, false, config.httpsAgent);
         }
         let transport;
         let isNativeTransport = false;
         const isHttpsRequest = isHttps.test(options.protocol);
-        options.agent = isHttpsRequest ? config.httpsAgent : config.httpAgent;
+        if (options.agent == null) {
+          options.agent = isHttpsRequest ? config.httpsAgent : config.httpAgent;
+        }
         if (isHttp2) {
           transport = http2Transport;
         } else {
@@ -55149,6 +55718,18 @@ var require_axios = __commonJS({
             const configBeforeRedirect = own2("beforeRedirect");
             if (configBeforeRedirect) {
               options.beforeRedirects.config = configBeforeRedirect;
+            }
+            if (auth) {
+              const requestOrigin = parsed.origin;
+              const authToRestore = auth;
+              options.beforeRedirects.auth = function beforeRedirectAuth(redirectOptions) {
+                try {
+                  if (new URL(redirectOptions.href).origin === requestOrigin) {
+                    redirectOptions.auth = authToRestore;
+                  }
+                } catch (e) {
+                }
+              };
             }
             transport = isHttpsRequest ? httpsFollow : httpFollow;
           }
@@ -55196,6 +55777,13 @@ var require_axios = __commonJS({
                   streams.push(zlib.createBrotliDecompress(brotliOptions));
                   delete res.headers["content-encoding"];
                 }
+                break;
+              case "zstd":
+                if (isZstdSupported) {
+                  streams.push(zlib.createZstdDecompress(zstdOptions));
+                  delete res.headers["content-encoding"];
+                }
+                break;
             }
           }
           responseStream = streams.length > 1 ? stream.pipeline(streams, utils$1.noop) : streams[0];
@@ -55528,8 +56116,8 @@ var require_axios = __commonJS({
         }
       });
     }
-    var encodeUTF8 = (str) => encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-    var resolveConfig = (config) => {
+    var encodeUTF8$1 = (str) => encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    function resolveConfig(config) {
       const newConfig = mergeConfig({}, config);
       const own2 = (key) => utils$1.hasOwnProp(newConfig, key) ? newConfig[key] : void 0;
       const data = own2("data");
@@ -55542,12 +56130,12 @@ var require_axios = __commonJS({
       const allowAbsoluteUrls = own2("allowAbsoluteUrls");
       const url2 = own2("url");
       newConfig.headers = headers = AxiosHeaders.from(headers);
-      newConfig.url = buildURL(buildFullPath(baseURL, url2, allowAbsoluteUrls), config.params, config.paramsSerializer);
+      newConfig.url = buildURL(buildFullPath(baseURL, url2, allowAbsoluteUrls), own2("params"), own2("paramsSerializer"));
       if (auth) {
-        headers.set("Authorization", "Basic " + btoa((auth.username || "") + ":" + (auth.password ? encodeUTF8(auth.password) : "")));
+        headers.set("Authorization", "Basic " + btoa((auth.username || "") + ":" + (auth.password ? encodeUTF8$1(auth.password) : "")));
       }
       if (utils$1.isFormData(data)) {
-        if (platform2.hasStandardBrowserEnv || platform2.hasStandardBrowserWebWorkerEnv) {
+        if (platform2.hasStandardBrowserEnv || platform2.hasStandardBrowserWebWorkerEnv || utils$1.isReactNative(data)) {
           headers.setContentType(void 0);
         } else if (utils$1.isFunction(data.getHeaders)) {
           setFormDataHeaders(headers, data.getHeaders(), own2("formDataHeaderPolicy"));
@@ -55566,7 +56154,7 @@ var require_axios = __commonJS({
         }
       }
       return newConfig;
-    };
+    }
     var isXHRAdapterSupported = typeof XMLHttpRequest !== "undefined";
     var xhrAdapter = isXHRAdapterSupported && function(config) {
       return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -55654,7 +56242,7 @@ var require_axios = __commonJS({
         };
         requestData === void 0 && requestHeaders.setContentType(null);
         if ("setRequestHeader" in request) {
-          utils$1.forEach(requestHeaders.toJSON(), function setRequestHeader(val, key) {
+          utils$1.forEach(toByteStringHeaderObject(requestHeaders), function setRequestHeader(val, key) {
             request.setRequestHeader(key, val);
           });
         }
@@ -55697,41 +56285,41 @@ var require_axios = __commonJS({
       });
     };
     var composeSignals = (signals, timeout) => {
-      const {
-        length
-      } = signals = signals ? signals.filter(Boolean) : [];
-      if (timeout || length) {
-        let controller = new AbortController();
-        let aborted;
-        const onabort = function(reason) {
-          if (!aborted) {
-            aborted = true;
-            unsubscribe();
-            const err = reason instanceof Error ? reason : this.reason;
-            controller.abort(err instanceof AxiosError ? err : new CanceledError(err instanceof Error ? err.message : err));
-          }
-        };
-        let timer = timeout && setTimeout(() => {
-          timer = null;
-          onabort(new AxiosError(`timeout of ${timeout}ms exceeded`, AxiosError.ETIMEDOUT));
-        }, timeout);
-        const unsubscribe = () => {
-          if (signals) {
-            timer && clearTimeout(timer);
-            timer = null;
-            signals.forEach((signal2) => {
-              signal2.unsubscribe ? signal2.unsubscribe(onabort) : signal2.removeEventListener("abort", onabort);
-            });
-            signals = null;
-          }
-        };
-        signals.forEach((signal2) => signal2.addEventListener("abort", onabort));
-        const {
-          signal
-        } = controller;
-        signal.unsubscribe = () => utils$1.asap(unsubscribe);
-        return signal;
+      signals = signals ? signals.filter(Boolean) : [];
+      if (!timeout && !signals.length) {
+        return;
       }
+      const controller = new AbortController();
+      let aborted = false;
+      const onabort = function(reason) {
+        if (!aborted) {
+          aborted = true;
+          unsubscribe();
+          const err = reason instanceof Error ? reason : this.reason;
+          controller.abort(err instanceof AxiosError ? err : new CanceledError(err instanceof Error ? err.message : err));
+        }
+      };
+      let timer = timeout && setTimeout(() => {
+        timer = null;
+        onabort(new AxiosError(`timeout of ${timeout}ms exceeded`, AxiosError.ETIMEDOUT));
+      }, timeout);
+      const unsubscribe = () => {
+        if (!signals) {
+          return;
+        }
+        timer && clearTimeout(timer);
+        timer = null;
+        signals.forEach((signal2) => {
+          signal2.unsubscribe ? signal2.unsubscribe(onabort) : signal2.removeEventListener("abort", onabort);
+        });
+        signals = null;
+      };
+      signals.forEach((signal2) => signal2.addEventListener("abort", onabort));
+      const {
+        signal
+      } = controller;
+      signal.unsubscribe = () => utils$1.asap(unsubscribe);
+      return signal;
     };
     var streamChunk = function* (chunk, chunkSize) {
       let len = chunk.byteLength;
@@ -55818,6 +56406,17 @@ var require_axios = __commonJS({
     var {
       isFunction
     } = utils$1;
+    var encodeUTF8 = (str) => encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    var decodeURIComponentSafe = (value) => {
+      if (!utils$1.isString(value)) {
+        return value;
+      }
+      try {
+        return decodeURIComponent(value);
+      } catch (error2) {
+        return value;
+      }
+    };
     var test = (fn, ...args) => {
       try {
         return !!fn(...args);
@@ -55825,9 +56424,16 @@ var require_axios = __commonJS({
         return false;
       }
     };
+    var maybeWithAuthCredentials = (url2) => {
+      const protocolIndex = url2.indexOf("://");
+      let urlToCheck = url2;
+      if (protocolIndex !== -1) {
+        urlToCheck = urlToCheck.slice(protocolIndex + 3);
+      }
+      return urlToCheck.includes("@") || urlToCheck.includes(":");
+    };
     var factory = (env) => {
-      var _utils$global;
-      const globalObject = (_utils$global = utils$1.global) !== null && _utils$global !== void 0 ? _utils$global : globalThis;
+      const globalObject = utils$1.global !== void 0 && utils$1.global !== null ? utils$1.global : globalThis;
       const {
         ReadableStream: ReadableStream2,
         TextEncoder: TextEncoder2
@@ -55929,6 +56535,7 @@ var require_axios = __commonJS({
         } = resolveConfig(config);
         const hasMaxContentLength = utils$1.isNumber(maxContentLength) && maxContentLength > -1;
         const hasMaxBodyLength = utils$1.isNumber(maxBodyLength) && maxBodyLength > -1;
+        const own2 = (key) => utils$1.hasOwnProp(config, key) ? config[key] : void 0;
         let _fetch = envFetch || fetch;
         responseType = responseType ? (responseType + "").toLowerCase() : "text";
         let composedSignal = composeSignals([signal, cancelToken && cancelToken.toAbortSignal()], timeout);
@@ -55938,6 +56545,36 @@ var require_axios = __commonJS({
         });
         let requestContentLength;
         try {
+          let auth = void 0;
+          const configAuth = own2("auth");
+          if (configAuth) {
+            const username = configAuth.username || "";
+            const password = configAuth.password || "";
+            auth = {
+              username,
+              password
+            };
+          }
+          if (maybeWithAuthCredentials(url2)) {
+            const parsedURL = new URL(url2, platform2.origin);
+            if (!auth && (parsedURL.username || parsedURL.password)) {
+              const urlUsername = decodeURIComponentSafe(parsedURL.username);
+              const urlPassword = decodeURIComponentSafe(parsedURL.password);
+              auth = {
+                username: urlUsername,
+                password: urlPassword
+              };
+            }
+            if (parsedURL.username || parsedURL.password) {
+              parsedURL.username = "";
+              parsedURL.password = "";
+              url2 = parsedURL.href;
+            }
+          }
+          if (auth) {
+            headers.delete("authorization");
+            headers.set("Authorization", "Basic " + btoa(encodeUTF8((auth.username || "") + ":" + (auth.password || ""))));
+          }
           if (hasMaxContentLength && typeof url2 === "string" && url2.startsWith("data:")) {
             const estimated = estimateDataURLDecodedBytes(url2);
             if (estimated > maxContentLength) {
@@ -55980,7 +56617,7 @@ var require_axios = __commonJS({
             ...fetchOptions,
             signal: composedSignal,
             method: method.toUpperCase(),
-            headers: headers.normalize().toJSON(),
+            headers: toByteStringHeaderObject(headers.normalize()),
             body: data,
             duplex: "half",
             credentials: isCredentialsSupported ? withCredentials : void 0
@@ -56309,7 +56946,8 @@ var require_axios = __commonJS({
             silentJSONParsing: validators.transitional(validators.boolean),
             forcedJSONParsing: validators.transitional(validators.boolean),
             clarifyTimeoutError: validators.transitional(validators.boolean),
-            legacyInterceptorReqResOrdering: validators.transitional(validators.boolean)
+            legacyInterceptorReqResOrdering: validators.transitional(validators.boolean),
+            advertiseZstdAcceptEncoding: validators.transitional(validators.boolean)
           }, false);
         }
         if (paramsSerializer != null) {
@@ -57806,7 +58444,7 @@ var require_spaceScopedResource = __commonJS({
 });
 
 // node_modules/@octopusdeploy/api-client/dist/index.js
-var require_dist = __commonJS({
+var require_dist2 = __commonJS({
   "node_modules/@octopusdeploy/api-client/dist/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -58438,10 +59076,10 @@ function getInputParameters() {
 
 // src/index.ts
 var import_fs2 = require("fs");
-var import_api_client2 = __toESM(require_dist());
+var import_api_client2 = __toESM(require_dist2());
 
 // src/api-wrapper.ts
-var import_api_client = __toESM(require_dist());
+var import_api_client = __toESM(require_dist2());
 async function createDeploymentFromInputs(client, parameters) {
   client.info("\u{1F419} Deploying a release in Octopus Deploy...");
   const command = {
@@ -58657,5 +59295,5 @@ urijs/src/URITemplate.js:
    *)
 
 axios/dist/node/axios.cjs:
-  (*! Axios v1.16.0 Copyright (c) 2026 Matt Zabriskie and contributors *)
+  (*! Axios v1.17.0 Copyright (c) 2026 Matt Zabriskie and contributors *)
 */
