@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.2.3](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.2...v4.2.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump js-yaml from 4.1.1 to 4.3.0 ([#337](https://github.com/OctopusDeploy/deploy-release-action/issues/337)) ([2b6e8a1](https://github.com/OctopusDeploy/deploy-release-action/commit/2b6e8a1c13c4758f14387f8b62c3a3b0f1c03bf9))
+* **deps:** bump @octopusdeploy/api-client to 3.11.5 ([#336](https://github.com/OctopusDeploy/deploy-release-action/issues/336)) ([dc172f4](https://github.com/OctopusDeploy/deploy-release-action/commit/dc172f45824f76f31b0fd247806284c68ba82b6a))
+* **deps:** bump @octopusdeploy/api-client to 3.11.6 ([#340](https://github.com/OctopusDeploy/deploy-release-action/issues/340)) ([0819dd2](https://github.com/OctopusDeploy/deploy-release-action/commit/0819dd26a31e856edafc8cc0d512092d45796cb5))
+* **deps:** bump axios from 1.17.0 to 1.18.1 ([#335](https://github.com/OctopusDeploy/deploy-release-action/issues/335)) ([789dc71](https://github.com/OctopusDeploy/deploy-release-action/commit/789dc717c1a97a6fd7a98590abce1d7f03dbe0a2))
+* **deps:** bump undici from 6.24.1 to 6.27.0 ([#330](https://github.com/OctopusDeploy/deploy-release-action/issues/330)) ([57b0eb4](https://github.com/OctopusDeploy/deploy-release-action/commit/57b0eb4a59ee8ce8325a5b03aa06b5d95b769dcf))
+* **deps:** update js-yaml to resolve DoS advisory ([#339](https://github.com/OctopusDeploy/deploy-release-action/issues/339)) ([f4974d5](https://github.com/OctopusDeploy/deploy-release-action/commit/f4974d5d395cee96e859444b4b93dd7e7801ad9e))
+
 ## [4.2.2](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.1...v4.2.2) (2026-06-08)
 
 
