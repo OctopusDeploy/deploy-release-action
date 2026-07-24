@@ -287,4 +287,26 @@ describe('integration tests', () => {
       }
     )
   })
+
+  test('can deploy a release and wait for completion', async () => {
+    const config: ClientConfiguration = {
+      userAgentApp: 'Test',
+      instanceURL: apiClientConfig.instanceURL,
+      apiKey: apiClientConfig.apiKey
+    }
+
+    const client = await Client.create(config)
+
+    await createReleaseForTest(client)
+
+    const result = await createDeploymentFromInputs(client, {
+      ...standardInputParameters,
+      releaseNumber: localReleaseNumber,
+      environments: ['Dev'],
+      waitForDeployment: true,
+      deploymentTimeoutMinutes: 2
+    })
+
+    expect(result.length).toBe(1)
+  })
 })
