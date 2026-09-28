@@ -27,6 +27,8 @@ export interface InputParameters {
   variables?: PromptedVariableValues
   runAt?: Date
   noRunAfter?: Date
+  waitForDeployment?: boolean
+  deploymentTimeoutMinutes: number
 }
 
 export function getInputParameters(): InputParameters {
@@ -51,7 +53,9 @@ export function getInputParameters(): InputParameters {
     useGuidedFailure: getBooleanInput('use_guided_failure') || undefined,
     variables: variablesMap,
     runAt: getInput('deploy_at') ? new Date(getInput('deploy_at')) : undefined,
-    noRunAfter: getInput('deploy_at_expiry') ? new Date(getInput('deploy_at_expiry')) : undefined
+    noRunAfter: getInput('deploy_at_expiry') ? new Date(getInput('deploy_at_expiry')) : undefined,
+    waitForDeployment: getBooleanInput('wait_for_deployment') || undefined,
+    deploymentTimeoutMinutes: parseInt(getInput('deployment_timeout') || '60', 10)
   }
 
   const errors: string[] = []
@@ -71,6 +75,11 @@ export function getInputParameters(): InputParameters {
     errors.push(
       "The Octopus space name is required, please specify explicitly through the 'space' input or set the OCTOPUS_SPACE environment variable."
     )
+  }
+
+  const deploymentTimeout = parseInt(getInput('deployment_timeout') || '60', 10)
+  if (isNaN(deploymentTimeout) || deploymentTimeout <= 0) {
+    errors.push(`deployment_timeout '${getInput('deployment_timeout')}' must be a positive integer (minutes).`)
   }
 
   const deployAt = getInput('deploy_at')
