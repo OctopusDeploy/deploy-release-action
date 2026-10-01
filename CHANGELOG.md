@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.2.6](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.5...v4.2.6) (2026-10-01)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump js-yaml from 5.2.2 to 5.4.1 ([#359](https://github.com/OctopusDeploy/deploy-release-action/issues/359)) ([b351e88](https://github.com/OctopusDeploy/deploy-release-action/commit/b351e88e536c49defe5a268bcc0b00df39cdf631))
+* **deps:** bump axios from 1.18.1 to 1.20.0 ([#362](https://github.com/OctopusDeploy/deploy-release-action/issues/362)) ([2f103f6](https://github.com/OctopusDeploy/deploy-release-action/commit/2f103f656a45dfc79da687ed9896623f60d2e6d0))
+* **deps:** bump brace-expansion from 5.0.9 to 5.0.12 ([#361](https://github.com/OctopusDeploy/deploy-release-action/issues/361)) ([13a48d0](https://github.com/OctopusDeploy/deploy-release-action/commit/13a48d0a531d4a2b430e9449c786f3dd12a2605a))
+* **deps:** bump undici from 6.28.0 to 6.29.0 ([#358](https://github.com/OctopusDeploy/deploy-release-action/issues/358)) ([e0a9769](https://github.com/OctopusDeploy/deploy-release-action/commit/e0a9769ef02a5c474caba959e2d6c19fe0599308))
+
 ## [4.2.5](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.4...v4.2.5) (2026-09-21)
 
 
