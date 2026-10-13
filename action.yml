@@ -18,6 +18,12 @@ inputs:
   use_guided_failure:
     default: "false"
     description: 'Whether to use guided failure mode if errors occur during the deployment.'
+  wait_for_deployment:
+    default: "false"
+    description: 'Whether to wait for the deployment(s) to complete before finishing the action. If true, the action will fail if any deployment fails.'
+  deployment_timeout:
+    default: "60"
+    description: 'Maximum time (in minutes) to wait for deployment(s) to complete. Only used when wait_for_deployment is true. Defaults to 60 minutes.'
   variables:
     description: 'A multi-line list of prompted variable values. Format: name:value'
   deploy_at:

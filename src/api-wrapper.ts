@@ -7,7 +7,10 @@ import {
   DeploymentRepository,
   DeploymentEnvironmentV2,
   DeploymentEnvironment,
-  ResourceCollection
+  ResourceCollection,
+  ServerTask,
+  ServerTaskWaiter,
+  TaskState
 } from '@octopusdeploy/api-client'
 
 export interface DeploymentResult {
@@ -72,6 +75,29 @@ export async function createDeploymentFromInputs(
       )[0].Name
     }
   })
+
+  if (parameters.waitForDeployment) {
+    client.info(`⏳ Waiting for deployment${response.DeploymentServerTasks.length > 1 ? 's' : ''    } to complete...`)
+    const waiter = new ServerTaskWaiter(client, parameters.space)
+    const completedTasks = await waiter.waitForServerTasksToComplete(
+      results.map(r => r.serverTaskId),
+      5000,
+      parameters.deploymentTimeoutMinutes * 60 * 1000,
+      (serverTask: ServerTask): void => {
+        client.info(`Waiting for task ${serverTask.Id}. Current status: ${serverTask.State}`)
+      }
+    )
+
+    const failedTasks = completedTasks.filter(t => t.State !== TaskState.Success)
+    if (failedTasks.length > 0) {
+      const summary = failedTasks.map(t => `${t.Id} (${t.State})`).join(', ')
+      throw new Error(`One or more deployments did not complete successfully: ${summary}`)
+    }
+
+    client.info(`✅ The deployment${
+        response.DeploymentServerTasks.length > 1 ? 's' : ''
+    } completed successfully!`)
+  }
 
   return results
 }
