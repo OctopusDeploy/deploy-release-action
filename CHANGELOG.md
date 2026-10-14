@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.7](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.6...v4.2.7) (2026-10-14)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump esbuild from 0.25.1 to 0.28.1 ([#322](https://github.com/OctopusDeploy/deploy-release-action/issues/322)) ([860818b](https://github.com/OctopusDeploy/deploy-release-action/commit/860818b40d06dfa3ea46c1f92d8309c69f5af058))
+
 ## [4.2.6](https://github.com/OctopusDeploy/deploy-release-action/compare/v4.2.5...v4.2.6) (2026-10-11)
 
 
